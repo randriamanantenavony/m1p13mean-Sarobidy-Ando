@@ -83,4 +83,9 @@ exports.deletePurchase = async (req, res) => {
             return res.status(404).json({ message: 'Achat non trouvé' });
         }
         res.json({ message: 'Achat supprimé' });
-    }   
+    }  
+    catch (error) {
+        console.error('Erreur lors de la suppression de l\'achat de l\'achat:', error);
+        res.status(500).json({ message: 'Erreur serveur' });
+    }
+}
