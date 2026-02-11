@@ -27,6 +27,7 @@ app.use(cors());
 app.use('/api/shops', shopRoutes);
 app.use('/api/categories_products', require('./routes/categoryRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
+app.use('/api/purchases', require('./routes/purchaseRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
