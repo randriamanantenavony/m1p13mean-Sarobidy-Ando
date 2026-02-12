@@ -1,7 +1,7 @@
 const Product = require('../models/boutique/Products');
 const Shop = require('../models/boutique/Shop');
 const Category = require('../models/boutique/Category_products');
-const notifications = require('../utils/notifications');
+const notifications = require('../models/general/Notification');
 
 console.log(notifications.addNotification);
 // Créer un produit pour une boutique
