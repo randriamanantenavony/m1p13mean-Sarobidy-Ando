@@ -1,91 +1,110 @@
 const Purchase = require('../models/Purchase');
 const Product = require('../models/Products');
+const Shop = require('../models/Shop');
+const Supplier = require('../models/Supplier');
 
-// Enregistrer un achat
+// =======================
+// Créer un achat / réappro
+// =======================
 exports.createPurchase = async (req, res) => {
-    try {
-        const { shopId, productId, quantity,purchasePrice } = req.body;
-        const product = await Product.findById(productId);
+  try {
+    const { shopId, productId, quantity, purchasePrice, supplierId } = req.body;
 
-        if (!product) {
-            return res.status(404).json({ message: 'Produit non trouvé' });
-        } 
-        
-        const purchase = new Purchase({
-            shopId,
-            productId,
-            quantity,
-            purchasePrice
-        });
-        
-        await purchase.save();
-        product.stock += quantity;
-        await product.save();
-        res.status(201).json(purchase);
+    // Vérification champs obligatoires
+    if (!shopId || !productId || !quantity || !purchasePrice) {
+      return res.status(400).json({ message: 'shopId, productId, quantity et purchasePrice sont requis' });
+    }
 
-    } catch (error) {
-        console.error('Erreur lors de la création de l\'achat:', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }   
+    // Vérifier boutique
+    const shop = await Shop.findById(shopId);
+    if (!shop) return res.status(404).json({ message: 'Boutique introuvable' });
+
+    // Vérifier produit
+    const product = await Product.findById(productId);
+    if (!product) return res.status(404).json({ message: 'Produit introuvable' });
+
+    // Vérifier fournisseur (optionnel)
+    if (supplierId) {
+      const supplier = await Supplier.findById(supplierId);
+      if (!supplier) return res.status(404).json({ message: 'Fournisseur introuvable' });
+    }
+
+    // Créer l'achat
+    const purchase = await Purchase.create({ shopId, productId, quantity, purchasePrice, supplierId });
+
+    // Mettre à jour stock
+    await Product.findByIdAndUpdate(productId, { $inc: { stock: quantity } });
+
+    res.status(201).json(purchase);
+
+  } catch (error) {
+    console.error('Erreur création achat:', error);
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 };
 
+// =======================
+// Lister tous les achats
+// =======================
+exports.getPurchases = async (req, res) => {
+  try {
+    const purchases = await Purchase.find()
+      .populate('shopId', 'name')
+      .populate('productId', 'name')
+      .populate('supplierId', 'name');
+    res.status(200).json(purchases);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
+
+// =======================
+// Lister achats par boutique
+// =======================
 exports.getPurchasesByShop = async (req, res) => {
-    try {
-        const { shopId } = req.params;
-        const purchases = await Purchase.find({ shopId }).populate('productId');
-        res.json(purchases);
-    }   
-    catch (error) {
-        console.error('Erreur lors de la récupération des achats:', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }
+  try {
+    const { shopId } = req.params;
+    const purchases = await Purchase.find({ shopId })
+      .populate('productId', 'name')
+      .populate('supplierId', 'name email phone');
+    res.status(200).json(purchases);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 };
 
-exports.getPurchasesByProduct = async (req, res) => {
-    try {
-        const { productId } = req.params;
-        const purchases = await Purchase.find({ productId }).populate('shopId');
-        res.json(purchases);
-    }   
-    catch (error) {
-        console.error('Erreur lors de la récupération des achats:', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }       
-};      
-
+// =======================
+// Mettre à jour un achat (rare, mais possible)
+// =======================
 exports.updatePurchase = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const { shopId, productId, quantity, purchasePrice } = req.body;
-        const purchase = await Purchase.findById(id);
+  try {
+    const updatedPurchase = await Purchase.findByIdAndUpdate(
+      req.params.id,
+      req.body,
+      { new: true, runValidators: true }
+    );
 
-        if (!purchase) {
-            return res.status(404).json({ message: 'Achat non trouvé' });
-        }   
-        purchase.shopId = shopId || purchase.shopId;
-        purchase.productId = productId || purchase.productId;
-        purchase.quantity = quantity || purchase.quantity;
-        purchase.purchasePrice = purchasePrice || purchase.purchasePrice;   
-        await purchase.save();
-        res.json(purchase);
-    }       
-    catch (error) {
-        console.error('Erreur lors de la mise à jour de l\'achat:', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }
+    if (!updatedPurchase) return res.status(404).json({ message: 'Achat introuvable' });
+
+    res.status(200).json(updatedPurchase);
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
 };
 
+// =======================
+// Supprimer un achat
+// =======================
 exports.deletePurchase = async (req, res) => {
-    try {
-        const { id } = req.params;
-        const purchase = await Purchase.findByIdAndDelete(id);  
-        if (!purchase) {
-            return res.status(404).json({ message: 'Achat non trouvé' });
-        }
-        res.json({ message: 'Achat supprimé' });
-    }  
-    catch (error) {
-        console.error('Erreur lors de la suppression de l\'achat de l\'achat:', error);
-        res.status(500).json({ message: 'Erreur serveur' });
-    }
-}
+  try {
+    const purchase = await Purchase.findByIdAndDelete(req.params.id);
+    if (!purchase) return res.status(404).json({ message: 'Achat introuvable' });
+
+    // Décrémenter le stock si tu veux annuler l'achat
+    await Product.findByIdAndUpdate(purchase.productId, { $inc: { stock: -purchase.quantity } });
+
+    res.status(200).json({ message: 'Achat supprimé avec succès' });
+  } catch (error) {
+    res.status(500).json({ message: 'Erreur serveur' });
+  }
+};
