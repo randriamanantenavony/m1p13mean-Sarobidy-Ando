@@ -1,4 +1,4 @@
-const Shop = require('../models/Shop');
+const Shop = require('../models/boutique/Shop');
 
 // Créer une boutique
 exports.createShop = async (req, res) => {

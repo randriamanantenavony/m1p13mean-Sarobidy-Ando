@@ -1,7 +1,7 @@
-const Purchase = require('../models/Purchase');
-const Product = require('../models/Products');
-const Shop = require('../models/Shop');
-const Supplier = require('../models/Supplier');
+const Purchase = require('../models/boutique/Purchase');
+const Product = require('../models/boutique/Products');
+const Shop = require('../models/boutique/Shop');
+const Supplier = require('../models/boutique/Supplier');
 
 // =======================
 // Créer un achat / réappro

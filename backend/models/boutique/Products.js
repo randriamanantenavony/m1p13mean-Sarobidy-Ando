@@ -7,7 +7,7 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'sold_out', 'promo'],
+    enum: ['active', 'inactive', 'sold_out', 'promo', 'out_of_stock'],
     default: 'active'
   },
   categoryId: {
@@ -15,6 +15,7 @@ const productSchema = new mongoose.Schema({
     ref: 'Category',
     required: true
   },
+  lowStockThreshold: { type: Number, default: 20},
   shopId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Shop',
