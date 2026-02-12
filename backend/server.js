@@ -30,6 +30,8 @@ app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/suppliers', require('./routes/supplierRoutes'));
 app.use('/api/purchases', require('./routes/purchaseRoutes'));
 app.use('/api/customers', require('./routes/customerRoutes'));
+app.use('/api/sales', require('./routes/salesRoutes'));
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

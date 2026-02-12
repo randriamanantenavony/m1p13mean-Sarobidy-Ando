@@ -8,7 +8,7 @@ router.get('/shop/:shopId', purchaseController.getPurchasesByShop);
 router.get('/product/:productId', async (req, res) => {
   try {
     const { productId } = req.params;
-    const purchases = await require('../models/Purchase').find({ productId })
+    const purchases = await require('../models/boutique/Purchase').find({ productId })
       .populate('shopId', 'name')
       .populate('supplierId', 'name');
     res.status(200).json(purchases);

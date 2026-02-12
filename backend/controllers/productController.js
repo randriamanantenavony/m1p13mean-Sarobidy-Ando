@@ -1,6 +1,6 @@
-const Product = require('../models/Products');
-const Shop = require('../models/Shop');
-const Category = require('../models/Category_products');
+const Product = require('../models/boutique/Products');
+const Shop = require('../models/boutique/Shop');
+const Category = require('../models/boutique/Category_products');
 
 // Créer un produit pour une boutique
 exports.createProduct = async (req, res) => {
@@ -27,6 +27,7 @@ exports.getProductsByShop = async (req, res) => {
   try {
     const products = await Product.find({ shopId: req.params.shopId })
                                   .populate('categoryId', 'name');
+
     res.status(200).json(products);
   } catch (err) {
     res.status(500).json({ error: err.message });
