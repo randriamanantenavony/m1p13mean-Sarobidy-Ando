@@ -2,7 +2,7 @@ const Purchase = require('../models/boutique/Purchase');
 const Product = require('../models/boutique/Products');
 const Shop = require('../models/boutique/Shop');
 const Supplier = require('../models/boutique/Supplier');
-const notifications = require('../utils/notifications');
+const notifications = require('../models/general/Notification');
 
 // =======================
 // Créer un achat / réappro
