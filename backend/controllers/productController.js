@@ -1,7 +1,9 @@
 const Product = require('../models/boutique/Products');
 const Shop = require('../models/boutique/Shop');
 const Category = require('../models/boutique/Category_products');
+const notifications = require('../utils/notifications');
 
+console.log(notifications.addNotification);
 // Créer un produit pour une boutique
 exports.createProduct = async (req, res) => {
   try {
@@ -25,8 +27,25 @@ exports.createProduct = async (req, res) => {
 // Lister tous les produits d'une boutique
 exports.getProductsByShop = async (req, res) => {
   try {
-    const products = await Product.find({ shopId: req.params.shopId })
-                                  .populate('categoryId', 'name');
+    const { shopId } = req.params;
+    let products = await Product.find({ shopId })
+                                .populate('categoryId', 'name');
+
+    products = products.map(p => {
+      const isLowStock = p.stock <= (p.lowStockThreshold || 5);
+
+      // Crée la notification si stock faible
+      if (isLowStock) {
+        notifications.addNotification({
+          type: 'low_stock',
+          message: `⚠️ Stock faible pour ${p.name} (reste ${p.stock})`,
+          referenceId: p._id,
+          shopId: p.shopId
+        });
+      }
+
+      return { ...p._doc, isLowStock };
+    });
 
     res.status(200).json(products);
   } catch (err) {
