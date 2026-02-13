@@ -26,7 +26,17 @@ const orderSchema = new mongoose.Schema({
     enum: ['not_started', 'in_progress', 'delivered'], 
     default: 'not_started' 
   },
-  notes: { type: String } 
+  notes: { type: String } ,
+  delivery: {
+  status: { 
+    type: String, 
+    enum: ['not_started', 'in_progress', 'delivered'], 
+    default: 'not_started' 
+  },
+  scheduledDate: Date,  // rempli par la boutique
+  actualDate: Date      // rempli par le client
+}
+
 }, { timestamps: true });
 
 module.exports = mongoose.model('Order', orderSchema);
