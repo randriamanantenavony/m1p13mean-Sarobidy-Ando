@@ -1,6 +1,7 @@
 const Order = require('../models/boutique/Order');
 const Product = require('../models/boutique/Products');
 const Sale = require('../models/boutique/Sales');
+const Promotion = require('../models/boutique/Promotion'); // nouveau
 const { addNotification } = require('../controllers/NotificationController');
 
 exports.validateOrder = async (req, res) => {
@@ -9,13 +10,8 @@ exports.validateOrder = async (req, res) => {
 
     const order = await Order.findById(orderId);
 
-    if (!order) {
-      return res.status(404).json({ message: 'Commande introuvable' });
-    }
-
-    if (order.status !== 'pending') {
-      return res.status(400).json({ message: 'Commande déjà traitée' });
-    }
+    if (!order) return res.status(404).json({ message: 'Commande introuvable' });
+    if (order.status !== 'pending') return res.status(400).json({ message: 'Commande déjà traitée' });
 
     // 🔎 Vérification stock global
     for (const item of order.products) {
@@ -33,22 +29,33 @@ exports.validateOrder = async (req, res) => {
           shopId: order.shopId
         });
 
-        return res.status(400).json({
-          message: 'Commande annulée : stock insuffisant'
-        });
+        return res.status(400).json({ message: 'Commande annulée : stock insuffisant' });
       }
     }
 
-    // ✅ Stock OK → décrémentation
+    // ✅ Vérifier les promotions actives pour chaque produit
+    const productIds = order.products.map(p => p.productId);
+    const activePromos = await Promotion.find({
+      productId: { $in: productIds },
+      shopId: order.shopId,
+      status: 'approved',
+      startDate: { $lte: new Date() },
+      endDate: { $gte: new Date() }
+    });
+
+    // Calculer le prix final avec promo
+    order.products = order.products.map(item => {
+      const promo = activePromos.find(p => p.productId.equals(item.productId));
+      if (promo) item.price = item.price * (1 - promo.discountPercent / 100);
+      return item;
+    });
+
+    // 🔄 Décrémenter le stock
     for (const item of order.products) {
-      await Product.findByIdAndUpdate(
-        item.productId,
-        { $inc: { stock: -item.quantity } },
-        { new: true }
-      );
+      await Product.findByIdAndUpdate(item.productId, { $inc: { stock: -item.quantity } });
     }
 
-    // 💰 Création Sale
+    // 💰 Création Sale avec prix promo si applicable
     const sale = new Sale({
       shopId: order.shopId,
       customerId: order.customerId,
@@ -58,7 +65,6 @@ exports.validateOrder = async (req, res) => {
         salePrice: p.price
       }))
     });
-
     await sale.save();
 
     // 📦 Update commande

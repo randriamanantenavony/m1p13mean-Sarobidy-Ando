@@ -3,6 +3,8 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const shopRoutes = require('./routes/shopRoutes');
 const cors = require('cors');
+require('./cron/promotion'); 
+
 
 console.log('Démarrage du serveur...');
 // Charger les variables d'environnement
@@ -34,7 +36,7 @@ app.use('/api/sales', require('./routes/salesRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/orders/validate', require('./routes/validateOrderRoutes'));
-
+app.use('/api/promotions', require('./routes/promotionRoutes'));
 
 
 const PORT = process.env.PORT || 3000;
