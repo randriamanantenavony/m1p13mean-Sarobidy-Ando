@@ -39,3 +39,15 @@ exports.deleteShop = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 }; 
+
+// lister les boutiques actives
+exports.getActiveShops = async (req, res) => {
+    try {
+        const shops = await Shop.find({status: 'active'})
+        .select('name category unitNumber phone email ')
+        .sort({ name: 1 });  
+        res.status(200).json(shops);
+    } catch (err) {
+        res.status(500).json({ error: err.message, success: false, message: 'Failed to retrieve active shops' });
+    }   
+};
