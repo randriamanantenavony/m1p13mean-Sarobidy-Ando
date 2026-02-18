@@ -44,10 +44,20 @@ exports.deleteShop = async (req, res) => {
 exports.getActiveShops = async (req, res) => {
     try {
         const shops = await Shop.find({status: 'active'})
-        .select('name category unitNumber phone email ')
+        .select('name category unitNumber phone email status website openingHours description ')
         .sort({ name: 1 });  
         res.status(200).json(shops);
     } catch (err) {
         res.status(500).json({ error: err.message, success: false, message: 'Failed to retrieve active shops' });
     }   
+};
+
+exports.getShopById = async (req, res) => {     
+    try {
+        const shop = await Shop.findById(req.params.id);
+        if (!shop) return res.status(404).json({ error: 'Shop not found' });
+        res.status(200).json(shop);
+    } catch (err) {
+        res.status(500).json({ error: err.message });
+    }
 };

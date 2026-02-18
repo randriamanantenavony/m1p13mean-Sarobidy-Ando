@@ -15,7 +15,7 @@ const productSchema = new mongoose.Schema({
     ref: 'Category',
     required: true
   },
-  lowStockThreshold: { type: Number, default: 200},
+  lowStockThreshold: { type: Number, default: 10},
   shopId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Shop',

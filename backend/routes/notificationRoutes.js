@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getNotificationsByShop } = require('../controllers/NotificationController');
+const { getNotificationsByShop } = require('../controllers/notificationController');
 
 router.get('/shop/:shopId', async (req, res) => {
   try {

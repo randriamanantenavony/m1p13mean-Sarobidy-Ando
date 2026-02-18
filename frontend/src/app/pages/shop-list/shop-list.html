@@ -1,0 +1,174 @@
+<div class="shops-container">
+
+  <!-- Header -->
+  <div class="shops-header">
+    <div class="header-left">
+      <span class="header-eyebrow">Centre Commercial</span>
+      <h2 class="header-title">Boutiques actives</h2>
+    </div>
+    <div class="header-right">
+      <span class="shops-count" *ngIf="!loading && shops.length > 0">
+        {{ shops.length }} boutique{{ shops.length > 1 ? 's' : '' }}
+      </span>
+    </div>
+  </div>
+
+  <!-- Loading -->
+  <div class="state-loading" *ngIf="loading">
+    <div class="spinner">
+      <span></span><span></span><span></span>
+    </div>
+    <p>Chargement des boutiques…</p>
+  </div>
+
+  <!-- Erreur -->
+  <div class="state-error" *ngIf="errorMessage && !loading">
+    <div class="error-icon">!</div>
+    <p>{{ errorMessage }}</p>
+  </div>
+
+  <!-- Grille de cards -->
+  <div class="shops-grid" *ngIf="shops.length > 0">
+    <div
+      class="shop-card"
+      *ngFor="let shop of shops; let i = index"
+      [attr.data-category]="shop.category"
+      [style.animation-delay]="i * 60 + 'ms'"
+    >
+      <!-- Bande couleur catégorie -->
+      <div class="card-ribbon"></div>
+
+      <!-- Icône + badge catégorie -->
+      <div class="card-top">
+        <div class="category-icon">{{ getCategoryIcon(shop.category) }}</div>
+        <span class="category-badge">{{ getCategoryLabel(shop.category) }}</span>
+      </div>
+
+      <!-- Infos principales -->
+      <div class="card-body">
+        <h3 class="shop-name">{{ shop.name }}</h3>
+        <div class="shop-unit">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0z"/>
+            <circle cx="12" cy="10" r="3"/>
+          </svg>
+          Unité {{ shop.unitNumber }}
+        </div>
+      </div>
+
+      <!-- Contacts -->
+      <div class="card-contacts">
+        <a class="contact-item" [href]="'tel:' + shop.phone">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.07 11.5 19.79 19.79 0 0 1 1 2.18 2 2 0 0 1 2.97 0h3a2 2 0 0 1 2 1.72c.13.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L7.1 7.7a16 16 0 0 0 6.29 6.29l1.06-1.06a2 2 0 0 1 2.11-.45c.9.34 1.85.57 2.81.7A2 2 0 0 1 22 16.92z"/>
+          </svg>
+          {{ shop.phone }}
+        </a>
+        <a class="contact-item" [href]="'mailto:' + shop.email">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,12 2,6"/>
+          </svg>
+          {{ shop.email }}
+        </a>
+      </div>
+
+      <!-- Bouton détails -->
+      <div class="card-footer">
+        <button class="btn-detail" (click)="viewDetailsShop(shop.id)">
+          Voir les détails
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M5 12h14M12 5l7 7-7 7"/>
+          </svg>
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Empty state -->
+  <div class="state-empty" *ngIf="!loading && shops.length === 0 && !errorMessage">
+    <div class="empty-icon">🏪</div>
+    <p class="empty-title">Aucune boutique active</p>
+    <p class="empty-sub">Les boutiques apparaîtront ici dès qu'elles seront disponibles.</p>
+  </div>
+
+</div>
+
+
+<div class="container">
+  <h2>Liste des boutiques actives</h2>
+
+  <div *ngIf="loading">Chargement...</div>
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+
+  <table *ngIf="!loading && shops.length > 0">
+    <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Catégorie</th>
+        <th>Unité</th>
+        <th>Téléphone</th>
+        <th>Email</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let shop of shops">
+        <td>{{ shop.name }}</td>
+        <td>{{ shop.category }}</td>
+        <td>{{ shop.unitNumber }}</td>
+        <td>{{ shop.phone }}</td>
+        <td>{{ shop.email }}</td>
+        <td>
+          <button (click)="viewDetailsShop(shop.id)">Voir détails</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div *ngIf="!loading && shops.length === 0">
+    Aucune boutique active trouvée.
+  </div>
+</div>
+
+<!-- Modal -->
+<div class="modal" [class.show]="selectedShop">
+  <div class="modal-content">
+    <button class="close-btn" (click)="closeModal()">X</button>
+
+    <h3>Détails de {{ selectedShop?.name }}</h3>
+    <p>Catégorie: {{ selectedShop?.category }}</p>
+    <p>Unité: {{ selectedShop?.unitNumber }}</p>
+    <p>Téléphone: {{ selectedShop?.phone }}</p>
+    <p>Email: {{ selectedShop?.email }}</p>
+    <p>Adresse: {{ selectedShop?.website }}</p>
+
+    <h4>Produits</h4>
+    <table *ngIf="products.length > 0">
+      <thead>
+        <tr>
+          <th>Nom</th>
+          <th>Catégorie</th>
+          <th>Prix</th>
+          <th>Stock</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let product of products" [class.low-stock]="product.isLowStock">
+          <td>{{ product.name }}</td>
+          <td>{{ product.categoryId?.name }}</td>
+          <td>{{ product.price }}</td>
+          <td>{{ product.stock }}</td>
+          <td>{{ product.status }}</td>
+        </tr>
+      </tbody>
+    </table>
+    <div *ngIf="products.length === 0">
+      Aucun produit trouvé pour cette boutique.
+    </div>
+  </div>
+</div>
+
+
