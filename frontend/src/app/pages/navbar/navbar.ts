@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
-export class NavbarComponent implements OnInit, OnDestroy {
+export class Navbar implements OnInit, OnDestroy {
 
   // ── Inputs (à brancher sur tes services) ──
   @Input() cartCount   = 0;
