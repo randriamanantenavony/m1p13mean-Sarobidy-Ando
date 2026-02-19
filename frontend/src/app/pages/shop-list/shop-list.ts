@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { NgIf, NgForOf } from '@angular/common';
 import { Product } from '../../models/product';
 import { LOCALE_ID } from '@angular/core';
+import { NavbarComponent } from "../navbar/navbar";
 
 
 
@@ -12,7 +13,7 @@ import { LOCALE_ID } from '@angular/core';
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule],
+  imports: [NgIf, NgForOf, CommonModule, NavbarComponent],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'], // <-- note le 's' !
 })
