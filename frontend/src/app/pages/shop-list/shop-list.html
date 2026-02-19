@@ -95,43 +95,6 @@
 
 </div>
 
-
-<div class="container">
-  <h2>Liste des boutiques actives</h2>
-
-  <div *ngIf="loading">Chargement...</div>
-  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
-
-  <table *ngIf="!loading && shops.length > 0">
-    <thead>
-      <tr>
-        <th>Nom</th>
-        <th>Catégorie</th>
-        <th>Unité</th>
-        <th>Téléphone</th>
-        <th>Email</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let shop of shops">
-        <td>{{ shop.name }}</td>
-        <td>{{ shop.category }}</td>
-        <td>{{ shop.unitNumber }}</td>
-        <td>{{ shop.phone }}</td>
-        <td>{{ shop.email }}</td>
-        <td>
-          <button (click)="viewDetailsShop(shop.id)">Voir détails</button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-
-  <div *ngIf="!loading && shops.length === 0">
-    Aucune boutique active trouvée.
-  </div>
-</div>
-
 <!-- Modal -->
 <div class="modal" [class.show]="selectedShop">
   <div class="modal-content">
@@ -151,7 +114,6 @@
           <th>Nom</th>
           <th>Catégorie</th>
           <th>Prix</th>
-          <th>Stock</th>
           <th>Status</th>
         </tr>
       </thead>
@@ -160,7 +122,6 @@
           <td>{{ product.name }}</td>
           <td>{{ product.categoryId?.name }}</td>
           <td>{{ product.price }}</td>
-          <td>{{ product.stock }}</td>
           <td>{{ product.status }}</td>
         </tr>
       </tbody>
