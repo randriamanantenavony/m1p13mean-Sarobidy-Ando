@@ -2,7 +2,7 @@ const Order = require('../models/boutique/Order');
 const Product = require('../models/boutique/Products');
 const Sale = require('../models/boutique/Sales');
 const Promotion = require('../models/boutique/Promotion'); // nouveau
-const { addNotification } = require('../controllers/NotificationController');
+const { addNotification } = require('./notificationController');
 
 exports.validateOrder = async (req, res) => {
   try {

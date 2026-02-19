@@ -1,6 +1,6 @@
 const Order = require('../models/boutique/Order');
 const Product = require('../models/boutique/Products');
-const { addNotification } = require('../controllers/NotificationController');
+const { addNotification } = require('./notificationController');
 
 exports.createOrder = async (req, res) => {
   try {

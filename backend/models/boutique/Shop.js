@@ -33,6 +33,10 @@ const shopSchema = new mongoose.Schema({
     enum: ['active', 'closed', 'renovation'],
     default: 'active'
   },
+  website: { type: String },
+  openingHours: { type: String },
+  description: { type: String },
+  imageUrl: { type: String },
 
 }, { timestamps: true }); // createdAt / updatedAt automatiques
 

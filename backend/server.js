@@ -41,7 +41,6 @@ app.use('/api/cart', require('./routes/carteRoutes'));
 app.use('/api/delivery', require('./routes/deliveryRoutes'));
 
 
-
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`Serveur démarré sur http://localhost:${PORT}`);
