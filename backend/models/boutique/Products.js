@@ -7,8 +7,8 @@ const productSchema = new mongoose.Schema({
   stock: { type: Number, default: 0 },
   status: {
     type: String,
-    enum: ['active', 'inactive', 'sold_out', 'promo', 'out_of_stock'],
-    default: 'active'
+    enum: ['available', 'inactive', 'sold_out', 'promo', 'out_of_stock'],
+    default: 'available'
   },
   categoryId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -20,7 +20,8 @@ const productSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'Shop',
     required: true
-  }
+  },
+  imageUrl: { type: String }
 }, { timestamps: true });
 
 module.exports = mongoose.model('Product', productSchema);

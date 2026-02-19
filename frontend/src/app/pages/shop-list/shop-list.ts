@@ -4,11 +4,18 @@ import { ShopService } from '../../services/shop';
 import { CommonModule } from '@angular/common';
 import { NgIf, NgForOf } from '@angular/common';
 import { Product } from '../../models/product';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+
 
 @Component({
   selector: 'app-shop-list',
   standalone: true,
-  imports: [NgIf, NgForOf],
+  providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
+  imports: [NgIf, NgForOf, CommonModule],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'], // <-- note le 's' !
 })
@@ -108,8 +115,41 @@ viewDetailsShop(shopId: string) {
   });
 }
 
-closeModal() {
+// closeModal() {
+//   this.selectedShop = null;
+// }
+
+
+// Ferme le modal
+closeModal(): void {
   this.selectedShop = null;
+  this.products = [];
+}
+
+// Ferme si on clique sur l'overlay (pas sur le panel)
+onOverlayClick(event: MouseEvent): void {
+  const target = event.target as HTMLElement;
+  if (target.classList.contains('modal-overlay')) {
+    this.closeModal();
+  }
+}
+
+// Nombre de produits en stock
+getInStockCount(): number {
+  return this.products.filter(p => p.status === 'available').length;
+}
+
+// Nombre de produits en stock faible
+getLowStockCount(): number {
+  return this.products.filter(p => p.isLowStock).length;
+}
+
+// Ajouter au panier — branche ta logique ici
+addToCart(product: any): void {
+  // Exemple : this.cartService.add(product);
+  console.log('Ajout panier :', product);
+
+  // Petit feedback visuel optionnel (toast, animation, etc.)
 }
 
 }
