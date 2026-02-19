@@ -10,8 +10,23 @@ import { Component, EventEmitter, Output } from '@angular/core';
 export class MallPlan {
   @Output() close = new EventEmitter<void>();
 
+  planImageUrl = 'https://www.siliconcentral.ae/media/2689/sc-ground-floor.jpg';
   closeModal() {
     this.close.emit();
   }
+
+openFullscreen(): void {
+  window.open(this.planImageUrl, '_blank');
+}
+
+downloadPlan(): void {
+  const a = document.createElement('a');
+  a.href = this.planImageUrl;
+  a.download = 'plan-centre-commercial.jpg';
+  a.target = '_blank'; 
+  a.click();
+}
+
+
 
 }
