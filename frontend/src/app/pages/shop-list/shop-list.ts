@@ -4,10 +4,8 @@ import { ShopService } from '../../services/shop';
 import { CommonModule } from '@angular/common';
 import { NgIf, NgForOf } from '@angular/common';
 import { Product } from '../../models/product';
-import { NgModule, LOCALE_ID } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
-import { registerLocaleData } from '@angular/common';
-import localeFr from '@angular/common/locales/fr';
+import { LOCALE_ID } from '@angular/core';
+import { NavbarComponent } from '../navbar/navbar';
 
 
 
@@ -15,7 +13,7 @@ import localeFr from '@angular/common/locales/fr';
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule],
+  imports: [NgIf, NgForOf, CommonModule , NavbarComponent],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'], // <-- note le 's' !
 })
