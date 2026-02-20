@@ -12,12 +12,16 @@ exports.createShop = async (req, res) => {
 
 // Lister toutes les boutiques
 exports.getShops = async (req, res) => {
-    try {
-        const shops = await Shop.find();
-        res.status(200).json(shops);
-    } catch (err) {
-        res.status(500).json({ error: err.message });
-    }
+  try {
+    // Populate category pour récupérer label, icon, etc.
+    const shops = await Shop.find()
+      .populate('categoryId', 'name description') // champ 'category' à peupler, et sélectionner seulement certains champs
+      .exec();
+
+    res.status(200).json(shops);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 };
 
 exports.updateShop = async (req, res) => {
@@ -42,14 +46,20 @@ exports.deleteShop = async (req, res) => {
 
 // lister les boutiques actives
 exports.getActiveShops = async (req, res) => {
-    try {
-        const shops = await Shop.find({status: 'active'})
-        .select('name category unitNumber phone email status website openingHours description ')
-        .sort({ name: 1 });  
-        res.status(200).json(shops);
-    } catch (err) {
-        res.status(500).json({ error: err.message, success: false, message: 'Failed to retrieve active shops' });
-    }   
+  try {
+    const shops = await Shop.find({ status: 'active' })
+      .populate('categoryId', 'name description')  // peupler la catégorie
+      .sort({ name: 1 })
+      .exec();  // exécute la requête
+
+    res.status(200).json(shops);
+  } catch (err) {
+    res.status(500).json({
+      error: err.message,
+      success: false,
+      message: 'Failed to retrieve active shops'
+    });
+  }
 };
 
 exports.getShopById = async (req, res) => {     

@@ -6,6 +6,7 @@ import { NgIf, NgForOf } from '@angular/common';
 import { Product } from '../../models/product';
 import { LOCALE_ID } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar";
+import { lastValueFrom } from 'rxjs';
 
 
 
@@ -19,7 +20,7 @@ import { NavbarComponent } from "../navbar/navbar";
 })
 export class ShopList implements OnInit {
   shops: Shop[] = [];
-  loading = true;
+  loading = false;
   errorMessage = '';
   selectedShop: Shop | null = null;
   products: Product[] = [];
@@ -27,26 +28,25 @@ export class ShopList implements OnInit {
   constructor(private shopService: ShopService) {}
 
   ngOnInit(): void {
-    console.log('Coucou');
     this.loadShop();
   }
+  
+loadShop(): void {
+  this.loading = true;
 
- loadShop() {
-  console.log('Avant appel service, shops =', this.shops);
   this.shopService.getActiveShops().subscribe({
     next: (data) => {
-      console.log('Données reçues:', data);
       this.shops = data ?? [];
-      console.log('Après assignation, shops =', this.shops);
-      this.loading = false;
+      console.log('Shops chargés:', this.shops);
+      console.log('Longueur des shops:', this.shops.length);
+      this.loading = false; // Angular détecte automatiquement
     },
-    error: (error) => {
-      console.error('Erreur service:', error);
+    error: (err) => {
+      console.error('Erreur récupération boutiques:', err);
       this.shops = [];
       this.loading = false;
     }
   });
-  console.log('Après subscription, shops =', this.shops);
 }
 
 
@@ -55,16 +55,17 @@ export class ShopList implements OnInit {
 // ─────────────────────────────────────────────────────
 
 // Icône emoji par catégorie
-getCategoryIcon(category: string): string {
+getCategoryIconFromShop(shop: Shop | null): string {
+  const categoryName = shop?.categoryId?.name;
   const icons: Record<string, string> = {
-    mode:           '👗',
-    restauration:   '🍽️',
-    electronique:   '💻',
-    beaute:         '💄',
-    services:       '🏦',
+    mode: '👗',
+    restauration: '🍽️',
+    electronique: '💻',
+    beaute: '💄',
+    services: '🏦',
     divertissement: '🎬',
   };
-  return icons[category] ?? '🏪';
+  return categoryName ? icons[categoryName] ?? '🏪' : '🏪';
 }
 
 // Label lisible par catégorie
