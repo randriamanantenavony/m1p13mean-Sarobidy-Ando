@@ -1,18 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
 import { MallPlan } from '../../features/mall-plan/mall-plan';
+import { ListeCategory } from '../liste-category/liste-category';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule,MallPlan],
+  imports: [RouterModule, CommonModule,MallPlan,ListeCategory],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
 export class NavbarComponent {
 
 isMallPlanOpen = false;
+showCategories = false;
+
+constructor(private router: Router) {}
+
+toggleCategories() {
+  console.log('Toggle categories parent');
+  this.showCategories = !this.showCategories;
+  console.log('showCategories parent :', this.showCategories);
+}
+
 
 openMallPlan() {
   this.isMallPlanOpen = true;
@@ -21,5 +32,12 @@ openMallPlan() {
 closeMallPlan() {
   this.isMallPlanOpen = false;
   }
+
+  handleCategory(categoryId: string) {
+  console.log('Catégorie sélectionnée par l’enfant :', categoryId);
+  // par exemple navigation ou ouverture d'un autre composant
+  this.showCategories = false;
+  this.router.navigate(['/categories', categoryId]);
+}
 
 }

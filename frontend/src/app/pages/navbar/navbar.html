@@ -32,7 +32,7 @@
       </a>
     </li>
     <li>
-      <a class="nav-link" href="/categories">
+      <a class="nav-link" (click)="toggleCategories()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="3" width="7" height="7" rx="1"/>
           <rect x="14" y="3" width="7" height="7" rx="1"/>
@@ -42,6 +42,8 @@
         Catégories
       </a>
     </li>
+    <app-liste-category *ngIf="showCategories" (close)="showCategories = false" (selectCategory)="handleCategory($event)"></app-liste-category>
+
     <li>
       <a class="nav-link" href="/promotions">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
