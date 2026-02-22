@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MallPlan } from '../../features/mall-plan/mall-plan';
 import { ListeCategory } from '../liste-category/liste-category';
@@ -12,6 +12,8 @@ import { ListeCategory } from '../liste-category/liste-category';
   styleUrls: ['./navbar.css'],
 })
 export class NavbarComponent {
+
+@Output() selectCategory = new EventEmitter<string>();
 
 isMallPlanOpen = false;
 showCategories = false;
@@ -36,8 +38,8 @@ closeMallPlan() {
   handleCategory(categoryId: string) {
   console.log('Catégorie sélectionnée par l’enfant :', categoryId);
   // par exemple navigation ou ouverture d'un autre composant
+  this.selectCategory.emit(categoryId);
   this.showCategories = false;
-  this.router.navigate(['/categories', categoryId]);
 }
 
 }

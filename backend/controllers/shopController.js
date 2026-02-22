@@ -71,3 +71,40 @@ exports.getShopById = async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 };
+
+exports.getShopsByCategory = async (req, res) => {
+  try {
+    console.log('--- Début getShopsByCategory ---');
+    console.log('Params reçus :', req.params);
+
+    const { categoryId } = req.params;
+    console.log('categoryId extrait :', categoryId);
+
+    if (!categoryId) {
+      console.warn('⚠️ categoryId manquant dans la requête');
+      return res.status(400).json({
+        message: 'categoryId manquant'
+      });
+    }
+
+    console.log('Recherche des shops actifs pour cette catégorie...');
+
+    const shops = await Shop.find({ categoryId: categoryId, status: 'active' })
+      .populate('categoryId', 'name description')
+      .sort({ name: 1 });
+
+    console.log(`Nombre de boutiques trouvées : ${shops.length}`);
+    console.log('Boutiques récupérées :', shops);
+
+    // ⚡ Retourner directement le tableau
+    res.status(200).json(shops);
+
+    console.log('--- Fin getShopsByCategory ---');
+  } catch (err) {
+    console.error('❌ Erreur lors de la récupération des boutiques :', err);
+    res.status(500).json({
+      message: 'Erreur lors de la récupération des boutiques',
+      error: err.message
+    });
+  }
+};

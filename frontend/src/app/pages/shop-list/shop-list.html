@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (selectCategory)="onSelectCategory($event)"></app-navbar>
 <div class="shops-container">
   <!-- Header -->
   <div class="shops-header">
@@ -20,6 +20,12 @@
     </div>
     <p>Chargement des boutiques…</p>
   </div>
+
+  <div class="filter-info" *ngIf="selectedCategoryId">
+  <button class="btn-reset" (click)="resetFilter()">
+    Voir toutes les boutiques
+  </button>
+</div>
 
   <!-- Erreur -->
   <div class="state-error" *ngIf="errorMessage && !loading">

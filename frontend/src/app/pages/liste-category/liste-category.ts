@@ -86,4 +86,5 @@ getCatIcon(name: string): string {
   const key = name?.toLowerCase().trim();
   return map[key] ?? '🏪';
 }
+
 }

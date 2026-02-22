@@ -21,8 +21,14 @@ getShopById(id: string) {
     return this.http.get<Shop>(`${this.url}/${id}`);
   }
 
-  getProductsByShop(shopId: string) {
+getProductsByShop(shopId: string) {
   return this.http.get<Product[]>(`http://localhost:5000/api/products/shop/${shopId}`);
+}
+
+getShopsByCategoryId(categoryId: string): Observable<Shop[]> {
+  console.log("=== DEBUG SERVICE SHOP ===");
+  console.log("ID reçu dans le service :", categoryId);
+  return this.http.get<Shop[]>(`${this.url}/by-category/${categoryId}`);
 }
 
 }
