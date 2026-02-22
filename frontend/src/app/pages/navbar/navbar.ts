@@ -1,13 +1,15 @@
+import { Promotion } from './../../services/promotions/promotion';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { MallPlan } from '../../features/mall-plan/mall-plan';
 import { ListeCategory } from '../liste-category/liste-category';
+import { Promotions } from '../promotions/promotions';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule,MallPlan,ListeCategory],
+  imports: [RouterModule, CommonModule,MallPlan,ListeCategory, Promotions],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
@@ -17,6 +19,7 @@ export class NavbarComponent {
 
 isMallPlanOpen = false;
 showCategories = false;
+showPromoModal = false;
 
 constructor(private router: Router) {}
 
@@ -40,6 +43,17 @@ closeMallPlan() {
   // par exemple navigation ou ouverture d'un autre composant
   this.selectCategory.emit(categoryId);
   this.showCategories = false;
+}
+
+openPromotionsModal(event: Event) {
+  console.log('Ouverture du modal promotions');
+  event.preventDefault();
+  this.showPromoModal = true;
+  console.log('showPromoModal :', this.showPromoModal);
+}
+
+closePromotionsModal() {
+  this.showPromoModal = false; // ferme le modal
 }
 
 }

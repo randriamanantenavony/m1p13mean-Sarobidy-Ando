@@ -1,0 +1,18 @@
+<button class="modal-close" (click)="closeModal()">✖</button>
+<div *ngIf="loading">Chargement des promotions…</div>
+<div *ngIf="errorMessage">{{ errorMessage }}</div>
+
+<div class="promotions-grid" *ngIf="promotions.length > 0">
+  <div class="promotion-card" *ngFor="let promo of promotions">
+    <h3>{{ promo.product?.name || 'Produit inconnu' }}</h3>
+    <p>Prix : {{ promo.product?.price }} AR</p>
+    <p>Remise : {{ promo.discountPercent }}%</p>
+    <p>Shop : {{ promo.product?.shop?.name }}</p>
+    <p>Email : {{ promo.product?.shop?.email }}</p>
+    <p>Website : <a [href]="promo.product?.shop?.website" target="_blank">{{ promo.product?.shop?.website }}</a></p>
+    <p>Étage : {{ promo.product?.shop?.floor }}</p>
+    <p>Unité : {{ promo.product?.shop?.unitNumber }}</p>
+  </div>
+</div>
+
+<div *ngIf="!loading && promotions.length === 0">Aucune promotion active.</div>

@@ -11,5 +11,6 @@ router.get('/active', shopController.getActiveShops);
 router.get('/by-category/:categoryId', shopController.getShopsByCategory);
 router.get('/:id', shopController.getShopById);
 
+
 module.exports = router;
 
