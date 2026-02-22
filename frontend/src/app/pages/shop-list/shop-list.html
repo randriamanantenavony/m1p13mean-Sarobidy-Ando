@@ -1,4 +1,4 @@
-<app-navbar></app-navbar>
+<app-navbar (selectCategory)="onSelectCategory($event)"></app-navbar>
 <div class="shops-container">
   <!-- Header -->
   <div class="shops-header">
@@ -21,6 +21,12 @@
     <p>Chargement des boutiques…</p>
   </div>
 
+  <div class="filter-info" *ngIf="selectedCategoryId">
+  <button class="btn-reset" (click)="resetFilter()">
+    Voir toutes les boutiques
+  </button>
+</div>
+
   <!-- Erreur -->
   <div class="state-error" *ngIf="errorMessage && !loading">
     <div class="error-icon">!</div>
@@ -31,7 +37,7 @@
     <div
       class="shop-card"
       *ngFor="let shop of shops; let i = index"
-      [attr.data-category]="shop.category"
+      [attr.data-category]="shop.categoryId.name"
       [style.animation-delay]="i * 60 + 'ms'"
     >
       <!-- Bande couleur catégorie -->
@@ -39,8 +45,8 @@
 
       <!-- Icône + badge catégorie -->
       <div class="card-top">
-        <div class="category-icon">{{ getCategoryIcon(shop.category) }}</div>
-        <span class="category-badge">{{ getCategoryLabel(shop.category) }}</span>
+        <div class="category-icon">{{ getCategoryIconFromShop(shop) }}</div>
+        <span class="category-badge">{{ getCategoryLabel(shop.categoryId.name) }}</span>
       </div>
 
       <!-- Infos principales -->
@@ -74,7 +80,7 @@
 
       <!-- Bouton détails -->
       <div class="card-footer">
-        <button class="btn-detail" (click)="viewDetailsShop(shop.id)">
+        <button class="btn-detail" (click)="viewDetailsShop(shop._id)">
           Voir les détails
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M5 12h14M12 5l7 7-7 7"/>
@@ -98,7 +104,6 @@
 <!-- ═══════════════════════════════════════════════
      MODAL DÉTAIL BOUTIQUE — shop-detail.modal.html
      ═══════════════════════════════════════════════ -->
-
 <div class="modal-overlay" [class.show]="selectedShop" (click)="onOverlayClick($event)">
   <div class="modal-panel" role="dialog" aria-modal="true">
 
@@ -123,9 +128,9 @@
           class="hero-image"
         />
         <!-- Badge catégorie flottant -->
-        <span class="hero-cat-badge" [attr.data-category]="selectedShop?.category">
-          {{ getCategoryIcon(selectedShop?.category ?? '') }}
-          {{ getCategoryLabel(selectedShop?.category ?? '') }}
+        <span class="hero-cat-badge" [attr.data-category]="selectedShop?.categoryId?.name">
+          {{ getCategoryIconFromShop(selectedShop) }}
+          {{ getCategoryLabel(selectedShop?.categoryId?.name ?? '') }}
         </span>
       </div>
 
@@ -294,5 +299,3 @@
   </div>
   <!-- fin modal-panel -->
 </div>
-
-

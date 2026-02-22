@@ -1,13 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { Shop } from '../../models/shop';
 import { ShopService } from '../../services/shop';
-import { CommonModule } from '@angular/common';
-import { NgIf, NgForOf } from '@angular/common';
+import { CommonModule, NgIf, NgForOf } from '@angular/common';
 import { Product } from '../../models/product';
 import { LOCALE_ID } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar";
-
-
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-shop-list',
@@ -15,139 +13,161 @@ import { NavbarComponent } from "../navbar/navbar";
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
   imports: [NgIf, NgForOf, CommonModule, NavbarComponent],
   templateUrl: './shop-list.html',
-  styleUrls: ['./shop-list.css'], // <-- note le 's' !
+  styleUrls: ['./shop-list.css'],
 })
 export class ShopList implements OnInit {
+
   shops: Shop[] = [];
-  loading = true;
+  loading = false;
   errorMessage = '';
   selectedShop: Shop | null = null;
   products: Product[] = [];
 
-  constructor(private shopService: ShopService) {}
+  selectedCategoryId: string | null = null; // ✅ IMPORTANT
+
+  constructor(private shopService: ShopService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    console.log('Coucou');
-    this.loadShop();
+    this.loadAllShops(); // charge tout au départ
   }
 
- loadShop() {
-  console.log('Avant appel service, shops =', this.shops);
-  this.shopService.getActiveShops().subscribe({
-    next: (data) => {
-      console.log('Données reçues:', data);
-      this.shops = data ?? [];
-      console.log('Après assignation, shops =', this.shops);
-      this.loading = false;
-    },
-    error: (error) => {
-      console.error('Erreur service:', error);
-      this.shops = [];
-      this.loading = false;
-    }
-  });
-  console.log('Après subscription, shops =', this.shops);
-}
+  // 🔹 Charger toutes les boutiques
+  loadAllShops(): void {
+    this.loading = true;
+    this.errorMessage = '';
 
-
-// ─────────────────────────────────────────────────────
-// À coller dans ton shop-list.component.ts
-// ─────────────────────────────────────────────────────
-
-// Icône emoji par catégorie
-getCategoryIcon(category: string): string {
-  const icons: Record<string, string> = {
-    mode:           '👗',
-    restauration:   '🍽️',
-    electronique:   '💻',
-    beaute:         '💄',
-    services:       '🏦',
-    divertissement: '🎬',
-  };
-  return icons[category] ?? '🏪';
-}
-
-// Label lisible par catégorie
-getCategoryLabel(category: string): string {
-  const labels: Record<string, string> = {
-    mode:           'Mode',
-    restauration:   'Restauration',
-    electronique:   'Électronique',
-    beaute:         'Beauté',
-    services:       'Services',
-    divertissement: 'Divertissement',
-  };
-  return labels[category] ?? category;
-}
-
-
-viewDetailsShop(shopId: string) {
-  console.log("Shop id:", shopId);
-
-  // Récupérer les détails de la boutique
-  this.shopService.getShopById(shopId).subscribe({
-    next: (data) => {
-      this.selectedShop = data;
-
-      // Récupérer les produits de la boutique
-    this.shopService.getProductsByShop(shopId).subscribe({
-      next: (productsData) => {
-        this.products = productsData.map(p => ({
-          ...p,
-          price: Number(p.price)
-        }));
+    this.shopService.getActiveShops().subscribe({
+      next: (data) => {
+        this.shops = data ?? [];
+        this.loading = false;
       },
       error: (err) => {
-        console.error('Erreur récupération produits:', err);
+        console.error(err);
+        this.errorMessage = "Erreur chargement boutiques";
+        this.loading = false;
+      }
+    });
+  }
+
+
+loadShopsByCategory(categoryId: string): void {
+  console.log("=== DEBUG API CATEGORY ===");
+  console.log("ID envoyé au backend :", categoryId);
+
+  this.loading = true;
+  this.shops = [];
+  this.shopService.getShopsByCategoryId(categoryId).subscribe({
+    next: (data) => {
+      console.log("Réponse backend :", data);
+      console.log("Nombre reçu :", data?.length);
+
+      this.shops = data ?? [];
+      this.loading = false;
+      this.cdr.detectChanges();
+      console.log('loading après API :', this.loading);
+    },
+    error: (err) => {
+      console.error("Erreur API :", err);
+      this.loading = false;
+      this.cdr.detectChanges();
+      console.log('loading après erreur API :', this.loading);
+    }
+  });
+}
+
+  // 🔹 Reçoit l'événement du navbar
+  onSelectCategory(categoryId: string) {
+    console.log('Catégorie reçue dans ShopList:', categoryId);
+
+    this.selectedCategoryId = categoryId;
+
+    if (categoryId) {
+      this.loadShopsByCategory(categoryId);
+    } else {
+      this.loadAllShops();
+    }
+  }
+
+  // 🔹 Réinitialiser filtre (optionnel)
+  resetFilter() {
+    this.selectedCategoryId = null;
+    this.loadAllShops();
+  }
+
+  // ----------------------------------------------------------------
+  // LE RESTE DE TON CODE (inchangé)
+  // ----------------------------------------------------------------
+
+  getCategoryIconFromShop(shop: Shop | null): string {
+    const categoryName = shop?.categoryId?.name;
+    const icons: Record<string, string> = {
+      mode: '👗',
+      restauration: '🍽️',
+      electronique: '💻',
+      beaute: '💄',
+      services: '🏦',
+      divertissement: '🎬',
+    };
+    return categoryName ? icons[categoryName] ?? '🏪' : '🏪';
+  }
+
+  getCategoryLabel(category: string): string {
+    const labels: Record<string, string> = {
+      mode: 'Mode',
+      restauration: 'Restauration',
+      electronique: 'Électronique',
+      beaute: 'Beauté',
+      services: 'Services',
+      divertissement: 'Divertissement',
+    };
+    return labels[category] ?? category;
+  }
+
+  viewDetailsShop(shopId: string) {
+    this.shopService.getShopById(shopId).subscribe({
+      next: (data) => {
+        this.selectedShop = data;
+
+        this.shopService.getProductsByShop(shopId).subscribe({
+          next: (productsData) => {
+            this.products = productsData.map(p => ({
+              ...p,
+              price: Number(p.price)
+            }));
+          },
+          error: () => {
+            this.products = [];
+          }
+        });
+      },
+      error: () => {
+        this.selectedShop = null;
         this.products = [];
       }
     });
-
-
-    },
-    error: (error) => {
-      console.error('Erreur service:', error);
-      this.selectedShop = null;
-      this.products = [];
-    }
-  });
-}
-
-// closeModal() {
-//   this.selectedShop = null;
-// }
-
-
-// Ferme le modal
-closeModal(): void {
-  this.selectedShop = null;
-  this.products = [];
-}
-
-// Ferme si on clique sur l'overlay (pas sur le panel)
-onOverlayClick(event: MouseEvent): void {
-  const target = event.target as HTMLElement;
-  if (target.classList.contains('modal-overlay')) {
-    this.closeModal();
   }
-}
 
-// Nombre de produits en stock
-getInStockCount(): number {
-  return this.products.filter(p => p.status === 'available').length;
-}
+  closeModal(): void {
+    this.selectedShop = null;
+    this.products = [];
+  }
 
-// Nombre de produits en stock faible
-getLowStockCount(): number {
-  return this.products.filter(p => p.isLowStock).length;
-}
+  onOverlayClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+    if (target.classList.contains('modal-overlay')) {
+      this.closeModal();
+    }
+  }
 
-// Ajouter au panier — branche ta logique ici
-addToCart(product: any): void {
-  // Exemple : this.cartService.add(product);
-  console.log('Ajout panier :', product);
+  getInStockCount(): number {
+    return this.products.filter(p => p.status === 'available').length;
+  }
 
-  // Petit feedback visuel optionnel (toast, animation, etc.)
-}
+  getLowStockCount(): number {
+    return this.products.filter(p => p.isLowStock).length;
+  }
 
+  addToCart(product: any): void {
+    console.log('Ajout panier :', product);
+  }
 }
