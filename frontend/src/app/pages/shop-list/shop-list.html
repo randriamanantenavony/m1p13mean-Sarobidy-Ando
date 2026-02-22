@@ -123,7 +123,7 @@
       <!-- Image boutique -->
       <div class="hero-image-wrap">
         <img
-          [src]="selectedShop?.imageUrl || 'assets/placeholder-shop.jpg'"
+          [src]="selectedShop?.imageUrl"
           [alt]="selectedShop?.name"
           class="hero-image"
         />
@@ -200,7 +200,7 @@
           </div>
           <div class="stat-chip">
             <span class="stat-number">{{ getInStockCount() }}</span>
-            <span class="stat-label">Produis disponibles</span>
+            <span class="stat-label">Produits disponibles</span>
           </div>
           <div class="stat-chip warn" *ngIf="getLowStockCount() > 0">
             <span class="stat-number">{{ getLowStockCount() }}</span>
