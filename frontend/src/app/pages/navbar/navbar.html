@@ -22,7 +22,7 @@
   <!-- Liens desktop -->
   <ul class="nav-links">
     <li>
-      <a class="nav-link" href="/boutiques">
+      <a class="nav-link" href="/shop-list">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
           <line x1="3" y1="6" x2="21" y2="6"/>
@@ -44,16 +44,27 @@
     </li>
     <app-liste-category *ngIf="showCategories" (close)="showCategories = false" (selectCategory)="handleCategory($event)"></app-liste-category>
 
-    <li>
-      <a class="nav-link" href="/promotions">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
-          <line x1="7" y1="7" x2="7.01" y2="7"/>
-        </svg>
-        Promotions
-      </a>
-    </li>
-    <li>
+ <li>
+  <a class="nav-link" href="#" (click)="openPromotionsModal($event)">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/>
+      <line x1="7" y1="7" x2="7.01" y2="7"/>
+    </svg>
+    Promotions
+    <span class="promo-count-badge" *ngIf="promotionsCount > 0">
+      {{ promotionsCount > 99 ? '99+' : promotionsCount }}
+    </span>
+  </a>
+</li>
+
+<!-- Modal Promotions -->
+<div class="modal-overlay" *ngIf="showPromoModal" (click)="closePromotionsModal()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <app-promotions (close)="closePromotionsModal()"></app-promotions>
+  </div>
+</div>
+
+ <li>
       <a class="nav-link" (click)="openMallPlan()">
         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <polygon points="3 6 9 3 15 6 21 3 21 18 15 21 9 18 3 21"/>

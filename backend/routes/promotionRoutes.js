@@ -5,5 +5,6 @@ const promotionController = require('../controllers/promotionController');
 
 // Créer une promotion
 router.post('/', promotionController.createPromotion);
-
+router.get('/shop/:shopId', promotionController.getPromotionsByShop);
+router.get('/', promotionController.getPromotions);
 module.exports = router;
