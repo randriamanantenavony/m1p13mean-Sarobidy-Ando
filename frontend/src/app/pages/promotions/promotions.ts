@@ -14,6 +14,7 @@ import { ShopService } from '../../services/shop';
 export class PromotionComponents implements OnInit , OnDestroy {
 
   @Output() close = new EventEmitter<void>();
+  @Output() promotionsloaded = new EventEmitter<void>();
 
   promotions: Promotion[] = [];
   loading = false;
@@ -42,6 +43,7 @@ export class PromotionComponents implements OnInit , OnDestroy {
       next: (data) => {
         this.promotions = data;
         console.log('Promotions reçues:', this.promotions);
+        this.promotionsloaded.emit();
         this.loading = false;
         this.cdr.detectChanges();
       },

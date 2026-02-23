@@ -1,3 +1,4 @@
+import { PromotionService } from './../../services/promotions/promotion';
 import { CommonModule } from '@angular/common';
 import { Component, EventEmitter, Output } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
@@ -5,6 +6,7 @@ import { MallPlan } from '../../features/mall-plan/mall-plan';
 import { ListeCategory } from '../liste-category/liste-category';
 import { PromotionComponents } from '../promotions/promotions';
 import { ChangeDetectorRef } from '@angular/core';
+
 @Component({
   selector: 'app-navbar',
   standalone: true,
@@ -20,7 +22,7 @@ isMallPlanOpen = false;
 showCategories = false;
 showPromoModal = false;
 
-constructor(private router: Router, private cdr: ChangeDetectorRef) {}
+constructor(private router: Router, private cdr: ChangeDetectorRef, private PromotionService: PromotionService) {}
 
 toggleCategories() {
   console.log('Toggle categories parent');
@@ -28,6 +30,15 @@ toggleCategories() {
   console.log('showCategories parent :', this.showCategories);
 }
 
+ngOnInit(): void {
+  console.log('NavbarComponent initialisé');
+  this.PromotionService.getActivePromotions().subscribe({
+    next: (data) => this.promotionsCount = data.length,
+    error: (err) => {
+      console.error('Erreur lors du chargement des promotions dans NavbarComponent :', err);
+    }
+  });
+}
 
 openMallPlan() {
   this.isMallPlanOpen = true;
@@ -53,6 +64,12 @@ openPromotionsModal(event: Event) {
 
 closePromotionsModal() {
   this.showPromoModal = false;
+}
+
+promotionsCount = 0;
+
+onPromotionsLoaded(count: number): void {
+  this.promotionsCount = count;
 }
 
 }
