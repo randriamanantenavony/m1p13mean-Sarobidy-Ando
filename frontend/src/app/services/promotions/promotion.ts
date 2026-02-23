@@ -13,6 +13,7 @@ export interface Shop {
 
 export interface Product {
   _id: string;
+  title: string;
   name: string;
   price: number;
   description?: string;
@@ -21,6 +22,8 @@ export interface Product {
 
 export interface Promotion {
   _id: string;
+  title: string;
+  description: string;
   discountPercent: number;
   startDate: string;
   endDate: string;

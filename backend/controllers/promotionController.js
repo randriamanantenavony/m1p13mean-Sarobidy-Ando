@@ -53,6 +53,8 @@ exports.getPromotions = async (req, res) => {
     // On transforme la réponse pour ne renvoyer que l'essentiel
     const result = promotions.map(promo => ({
       _id: promo._id,
+      title: promo.title,
+      description: promo.description,
       discountPercent: promo.discountPercent,
       startDate: promo.startDate,
       endDate: promo.endDate,
