@@ -268,6 +268,13 @@
               <span class="price-value">{{ product.price }}</span>
               <span class="price-currency">AR</span>
             </div>
+             <div class="product-price">
+                <app-favorite-button
+                [isFavorite]="product.isFavorite"
+                (toggled)="toggleFavorite(product)">
+              </app-favorite-button>
+             </div>
+
             <button
               class="btn-cart"
               (click)="addToCart(product)"

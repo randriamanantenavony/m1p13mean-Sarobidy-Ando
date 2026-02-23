@@ -39,7 +39,7 @@ app.use('/api/orders/validate', require('./routes/validateOrderRoutes'));
 app.use('/api/promotions', require('./routes/promotionRoutes'));
 app.use('/api/cart', require('./routes/carteRoutes'));
 app.use('/api/delivery', require('./routes/deliveryRoutes'));
-
+app.use('/api/favorites', require('./routes/favoriteRoutes'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

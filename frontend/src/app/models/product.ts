@@ -10,3 +10,6 @@ export interface Product {
   imageUrl?: string;
 }
 
+export interface ProductUI extends Product {
+  isFavorite: boolean;
+}
