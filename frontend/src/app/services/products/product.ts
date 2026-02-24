@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product } from '../../models/product';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -15,10 +16,11 @@ export class ProductService {
   return this.http.get<Product[]>(`${this.apiUrl}/shop/${shopId}`);
 }
 
-updateProduct(shopId : string){
- return this.http.put
-}
-
-
+ updateProduct(productId: string, data: Partial<Product>): Observable<Product> {
+    return this.http.put<Product>(
+      `${this.apiUrl}/${productId}`,
+      data
+    );
+  }
 
 }

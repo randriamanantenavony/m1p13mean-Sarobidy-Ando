@@ -74,7 +74,7 @@
 
       <!-- ACTIONS -->
       <div class="actions">
-        <button class="btn edit" (click)="editProduct(product._id)">
+        <button class="btn edit" (click)="editProduct(product)">
           Modifier
         </button>
 
@@ -86,5 +86,35 @@
     </div>
 
   </div>
+
+</div>
+
+
+<div class="modal-backdrop" *ngIf="isEditModalOpen"></div>
+
+<div class="modal" *ngIf="isEditModalOpen">
+
+  <h3>Modifier produit</h3>
+
+  <form (ngSubmit)="submitUpdate()">
+
+    <label>Prix</label>
+    <input type="number" [(ngModel)]="selectedProduct!.price" name="price" required>
+
+    <label>Stock</label>
+    <input type="number" [(ngModel)]="selectedProduct!.stock" name="stock" required>
+
+    <label>Status</label>
+    <select [(ngModel)]="selectedProduct!.status" name="status">
+      <option value="avalaible">avalaible</option>
+      <option value="inactive">Inactif</option>
+    </select>
+
+    <div class="modal-actions">
+      <button type="submit">Enregistrer</button>
+      <button type="button" (click)="closeModal()">Annuler</button>
+    </div>
+
+  </form>
 
 </div>
