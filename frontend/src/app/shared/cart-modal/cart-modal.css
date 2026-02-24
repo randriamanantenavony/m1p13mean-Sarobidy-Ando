@@ -330,3 +330,114 @@
   .product-thumb { width: 32px; height: 32px; }
   .remove-btn { font-size: 0.7rem; padding: 0.22rem 0.5rem; }
 }
+
+/* ═══════════════════════════════════════
+   ✅  Bouton Passer la commande
+   Thème : Blanc & Bleu Azure
+═══════════════════════════════════════ */
+
+.checkout-btn {
+  /* Layout */
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 0.55rem 1.2rem;
+
+  /* Typo */
+  font-family: inherit;
+  font-size: 0.85rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  white-space: nowrap;
+
+  /* Couleurs — dégradé azure avec accent cyan */
+  color: #ffffff;
+  background: linear-gradient(135deg, #1e88e5 0%, #00acc1 100%);
+  border: none;
+  border-radius: 0 0 10px 10px; /* s'arrondit en bas de la card boutique */
+
+  /* Ombre */
+  box-shadow: 0 3px 10px rgba(30, 136, 229, 0.3);
+
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+
+  transition:
+    background  0.25s ease,
+    box-shadow  0.2s ease,
+    transform   0.15s ease;
+}
+
+/* ── Reflet brillant ── */
+.checkout-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    120deg,
+    rgba(255, 255, 255, 0)    25%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0)    75%
+  );
+  transform: translateX(-100%);
+  transition: transform 0.4s ease;
+}
+
+/* ── Icône coche ── */
+.checkout-btn::after {
+  content: '✓';
+  margin-left: 0.45rem;
+  font-size: 0.9rem;
+  font-weight: 900;
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  display: inline-block;
+}
+
+/* ── Hover ── */
+.checkout-btn:hover {
+  background: linear-gradient(135deg, #1565c0 0%, #00838f 100%);
+  box-shadow: 0 5px 18px rgba(30, 136, 229, 0.38);
+  transform: translateY(-1px);
+}
+
+.checkout-btn:hover::before {
+  transform: translateX(100%);
+}
+
+.checkout-btn:hover::after {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* ── Clic ── */
+.checkout-btn:active {
+  transform: scale(0.98);
+  box-shadow: 0 2px 6px rgba(30, 136, 229, 0.25);
+}
+
+/* ── Focus clavier ── */
+.checkout-btn:focus-visible {
+  outline: none;
+  box-shadow:
+    0 0 0 3px rgba(0, 188, 212, 0.35),
+    0 3px 10px rgba(30, 136, 229, 0.3);
+}
+
+/* ── Désactivé ── */
+.checkout-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  background: #b0bec5;
+  box-shadow: none;
+  transform: none;
+}
+
+.checkout-btn:disabled::before,
+.checkout-btn:disabled::after {
+  display: none;
+}

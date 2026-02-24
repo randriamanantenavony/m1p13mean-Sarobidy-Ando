@@ -1,4 +1,4 @@
-<!-- Backdrop -->
+<!-- Backdrop
 <div class="modal-backdrop" *ngIf="isOpen" (click)="close()"></div>
 
 
@@ -9,6 +9,10 @@
     <button class="close-btn" (click)="close()">✖</button>
   </div>
 
+  <div *ngFor="let cart of carts">
+  <h4>{{ cart.shop.name }}</h4>
+  <pre>{{ cart.products | json }}</pre>
+</div>
   <div class="modal-body" *ngIf="!loading; else loadingTpl">
     <div *ngIf="carts.length === 0">
       <p>Votre panier est vide.</p>
@@ -34,9 +38,10 @@
 
       <!-- Bouton supprimer -->
 
-      <p class="shop-total">
+      <!-- <p class="shop-total">
         Total boutique: {{ getCartTotal(cart.products)  }} AR
-      </p>
+      </p> -->
+      <button class="checkout-btn" (click)="checkoutCart(cart.cartId)">Passer la commande</button>
     </div>
   </div>
 
