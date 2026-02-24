@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Product } from '../../models/product';
+import { Product, ProductCreate } from '../../models/product';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -22,5 +22,10 @@ export class ProductService {
       data
     );
   }
+
+
+  createProduct(data: ProductCreate) {
+  return this.http.post<Product>(`${this.apiUrl}/`, data);
+}
 
 }
