@@ -76,13 +76,14 @@ exports.getCart = async (req, res) => {
 // Supprimer un produit du panier
 exports.removeFromCart = async (req, res) => {
   try {
-    const { clientId, shopId, productId } = req.body;
+    const { cartId, productId } = req.body;
 
-    const cart = await Cart.findOne({ clientId, shopId });
+    const cart = await Cart.findById(cartId); // <-- chercher par cartId
     if (!cart) return res.status(404).json({ error: 'Panier introuvable' });
 
     cart.products = cart.products.filter(p => p.productId.toString() !== productId);
     await cart.save();
+
     res.status(200).json(cart);
 
   } catch (err) {
