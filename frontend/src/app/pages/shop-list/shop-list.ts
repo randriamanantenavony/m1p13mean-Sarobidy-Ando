@@ -2,30 +2,36 @@ import { Component, OnInit } from '@angular/core';
 import { Shop } from '../../models/shop';
 import { ShopService } from '../../services/shop';
 import { CommonModule, NgIf, NgForOf } from '@angular/common';
-import { Product } from '../../models/product';
+import { Product, ProductUI } from '../../models/product';
 import { LOCALE_ID } from '@angular/core';
 import { NavbarComponent } from "../navbar/navbar";
 import { ChangeDetectorRef } from '@angular/core';
+import { FavoriteButton } from '../../shared/favorite-button/favorite-button';
+import { Favorite } from '../../services/favorites/favorite';
+
+const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
 
 @Component({
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule, NavbarComponent],
+  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'],
 })
 export class ShopList implements OnInit {
 
+
   shops: Shop[] = [];
   loading = false;
   errorMessage = '';
   selectedShop: Shop | null = null;
-  products: Product[] = [];
+  products: ProductUI[] = [];
+  isFavorite: boolean = false;
 
   selectedCategoryId: string | null = null; // ✅ IMPORTANT
 
-  constructor(private shopService: ShopService, private cdr: ChangeDetectorRef) {}
+  constructor(private shopService: ShopService, private cdr: ChangeDetectorRef, private favoriteService: Favorite) {}
 
   ngOnInit(): void {
     this.loadAllShops(); // charge tout au départ
@@ -132,7 +138,8 @@ loadShopsByCategory(categoryId: string): void {
           next: (productsData) => {
             this.products = productsData.map(p => ({
               ...p,
-              price: Number(p.price)
+              price: Number(p.price),
+              isFavorite: false
             }));
           },
           error: () => {
@@ -170,4 +177,44 @@ loadShopsByCategory(categoryId: string): void {
   addToCart(product: any): void {
     console.log('Ajout panier :', product);
   }
+
+toggleFavorite(product: ProductUI) {
+  if (!this.selectedShop) return;
+
+  const payload = {
+    userId: STATIC_USER_ID,
+    productId: product._id,
+    shopId: this.selectedShop._id
+  };
+
+  console.log('API toggleFavorite appelé avec :', payload);
+
+  this.favoriteService.toggleFavorite(
+    STATIC_USER_ID,
+    product._id,
+    this.selectedShop._id
+  ).subscribe({
+    next: (res) => {
+      console.log('Réponse backend :', res);
+
+      if (res && res.favoriteProducts) {
+        // 🔹 Met à jour tous les produits de la boutique pour ce user
+        this.products.forEach(p => {
+          if (p.shopId === this.selectedShop?._id) {
+            p.isFavorite = res.favoriteProducts.some(
+              (f: any) => f.productId === p._id
+            );
+          }
+        });
+      }
+
+      console.log('Produits après mise à jour des favoris :', this.products);
+    },
+    error: (err) => {
+      console.error('Erreur toggle favorite :', err);
+    }
+  });
+}
+
+
 }
