@@ -8,6 +8,7 @@ export interface Product {
   shopId: string;
   isLowStock?: boolean;
   imageUrl?: string;
+  stock : number;
 }
 
 export interface ProductUI extends Product {
