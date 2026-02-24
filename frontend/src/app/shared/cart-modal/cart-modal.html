@@ -1,0 +1,47 @@
+<!-- Backdrop -->
+<div class="modal-backdrop" *ngIf="isOpen" (click)="close()"></div>
+
+
+<!-- Modal -->
+<div class="cart-modal" *ngIf="isOpen">
+  <div class="modal-header">
+    <h3>🛒 Mon panier ({{ totalItems }} articles)</h3>
+    <button class="close-btn" (click)="close()">✖</button>
+  </div>
+
+  <div class="modal-body" *ngIf="!loading; else loadingTpl">
+    <div *ngIf="carts.length === 0">
+      <p>Votre panier est vide.</p>
+    </div>
+
+    <div *ngFor="let cart of carts" class="shop-cart">
+      <h4>{{ cart.shop.name }}</h4>
+      <ul>
+        <li *ngFor="let product of cart.products">
+          <div class="product-info">
+            <img *ngIf="product.imageUrl" [src]="product.imageUrl" alt="{{product.name}}" class="product-thumb">
+            <span>{{ product.name }} ({{ product.quantity }})</span>
+          </div>
+      <span>{{ product.price * product.quantity }} AR</span>
+        <div class="product-quantity-controls">
+        <button (click)="updateProductQuantity(cart.cartId, product.productId, product.quantity - 1)">-</button>
+        <span>{{ product.quantity }}</span>
+        <button (click)="updateProductQuantity(cart.cartId, product.productId, product.quantity + 1)">+</button>
+        <button class="remove-btn" (click)="removeProduct(cart.cartId, product.productId)">Supprimer</button>
+      </div>
+    </li>
+      </ul>
+
+      <!-- Bouton supprimer -->
+
+      <p class="shop-total">
+        Total boutique: {{ getCartTotal(cart.products)  }} AR
+      </p>
+    </div>
+  </div>
+
+  <ng-template #loadingTpl>
+    <p>Chargement du panier...</p>
+  </ng-template>
+</div>
+
