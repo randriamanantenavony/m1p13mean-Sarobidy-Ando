@@ -34,14 +34,41 @@ exports.addToCart = async (req, res) => {
   }
 };
 
-// Voir le panier d’un client pour une boutique
+
 exports.getCart = async (req, res) => {
   try {
-    const { clientId, shopId } = req.params;
-    const cart = await Cart.findOne({ clientId, shopId })
-                           .populate('products.productId', 'name price stock');
-    res.status(200).json(cart || { products: [] });
+    const { clientId } = req.params;
+
+    // Récupère tous les paniers du client
+    const carts = await Cart.find({ clientId })
+      .populate('shopId', 'name address') // infos boutique
+      .populate('products.productId', 'name price imageUrl categoryId stock'); // infos produit
+
+    if (!carts || carts.length === 0) {
+      return res.status(200).json({ carts: [] });
+    }
+
+    // Formater les données pour le frontend
+    const formattedCarts = carts.map(cart => ({
+      cartId: cart._id,
+      shop: cart.shopId,
+      products: cart.products.map(p => ({
+        productId: p.productId._id,
+        name: p.productId.name,
+        category: p.productId.categoryId?.name || null,
+        imageUrl: p.productId.imageUrl || null,
+        quantity: p.quantity,
+        price: p.price
+      })),
+      totalItems: cart.products.reduce((sum, p) => sum + p.quantity, 0),
+      createdAt: cart.createdAt,
+      updatedAt: cart.updatedAt
+    }));
+
+    res.status(200).json({ carts: formattedCarts });
+
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };
@@ -58,6 +85,26 @@ exports.removeFromCart = async (req, res) => {
     await cart.save();
     res.status(200).json(cart);
 
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
+// cartController.js
+exports.updateQuantity = async (req, res) => {
+  try {
+    const { cartId, productId, quantity } = req.body;
+
+    const cart = await Cart.findById(cartId);
+    if (!cart) return res.status(404).json({ error: 'Panier introuvable' });
+
+    const index = cart.products.findIndex(p => p.productId.toString() === productId);
+    if (index < 0) return res.status(404).json({ error: 'Produit non trouvé dans le panier' });
+
+    cart.products[index].quantity = quantity; // ou += quantity si tu veux ajouter
+    await cart.save();
+
+    res.status(200).json(cart);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }

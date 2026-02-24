@@ -6,11 +6,12 @@ import { MallPlan } from '../../features/mall-plan/mall-plan';
 import { ListeCategory } from '../liste-category/liste-category';
 import { PromotionComponents } from '../promotions/promotions';
 import { ChangeDetectorRef } from '@angular/core';
+import { CartModalComponent } from '../../shared/cart-modal/cart-modal';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule,MallPlan,ListeCategory, PromotionComponents],
+  imports: [RouterModule, CommonModule,MallPlan,ListeCategory, PromotionComponents,CartModalComponent ],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
@@ -21,6 +22,7 @@ export class NavbarComponent {
 isMallPlanOpen = false;
 showCategories = false;
 showPromoModal = false;
+clientId = '64b8c9e5f1a2c9b1d2e3f4a5'; // ID utilisateur statique pour les tests
 
 constructor(private router: Router, private cdr: ChangeDetectorRef, private PromotionService: PromotionService) {}
 
