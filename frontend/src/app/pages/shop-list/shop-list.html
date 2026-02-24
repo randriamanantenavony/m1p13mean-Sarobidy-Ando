@@ -275,7 +275,7 @@
               </app-favorite-button>
              </div>
 
-            <button
+            <!-- <button
               class="btn-cart"
               (click)="addToCart(product)"
               [disabled]="product.status !== 'available'"
@@ -288,7 +288,13 @@
                          a2 2 0 0 0 2-1.61L23 6H6"/>
               </svg>
               Ajouter
-            </button>
+            </button> -->
+           <app-add-to-cart-button
+              [product]="product"
+              [shopId]="selectedShop?._id"
+              (productAdded)="onProductAddedToCart($event)">
+            </app-add-to-cart-button>
+
           </div>
 
         </div>

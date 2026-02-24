@@ -1,0 +1,18 @@
+.btn-cart {
+  padding: 8px 14px;
+  border: none;
+  border-radius: 8px;
+  background: #111;
+  color: white;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.btn-cart:hover {
+  opacity: 0.9;
+}
+
+.btn-cart:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

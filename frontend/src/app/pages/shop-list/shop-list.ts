@@ -8,6 +8,7 @@ import { NavbarComponent } from "../navbar/navbar";
 import { ChangeDetectorRef } from '@angular/core';
 import { FavoriteButton } from '../../shared/favorite-button/favorite-button';
 import { Favorite } from '../../services/favorites/favorite';
+import { AddToCartButtonComponent } from "../../shared/add-to-cart-button/add-to-cart-button";
 
 const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
 
@@ -15,7 +16,7 @@ const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton],
+  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton, AddToCartButtonComponent],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'],
 })
@@ -216,5 +217,12 @@ toggleFavorite(product: ProductUI) {
   });
 }
 
+onProductAddedToCart(event: any) {
+  console.log('Produit ajouté :', event.product);
+  console.log('Panier mis à jour :', event.cart);
+  alert(`Produit "${event.product.name}" ajouté au panier !`); // Simple alert pour feedback
+  // Ou afficher notification
+  // this.toastr.success('Produit ajouté au panier');
+}
 
 }
