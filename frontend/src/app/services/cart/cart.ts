@@ -29,4 +29,8 @@ export class CartService {
     return this.http.post(`${this.apiUrl}/remove`, { cartId, productId });
   }
 
+   checkoutCart(cartId: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/checkout`, { cartId });
+  }
+
 }

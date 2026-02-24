@@ -111,12 +111,11 @@ exports.updateQuantity = async (req, res) => {
   }
 };
 
-// Passer une commande depuis le panier
 exports.checkoutCart = async (req, res) => {
   try {
-    const { clientId, shopId } = req.body;
+    const { cartId } = req.body;
 
-    const cart = await Cart.findOne({ clientId, shopId }).populate('products.productId');
+    const cart = await Cart.findById(cartId).populate('products.productId');
     if (!cart || !cart.products.length) return res.status(400).json({ error: 'Panier vide' });
 
     // Vérifier stock
@@ -126,13 +125,11 @@ exports.checkoutCart = async (req, res) => {
       }
     }
 
-    // Calcul total
     const totalAmount = cart.products.reduce((sum, p) => sum + p.quantity * p.price, 0);
 
-    // Créer commande
     const order = new Order({
-      shopId,
-      customerId: clientId,
+      shopId: cart.shopId,
+      customerId: cart.clientId,
       products: cart.products.map(p => ({
         productId: p.productId._id,
         quantity: p.quantity,
@@ -144,21 +141,20 @@ exports.checkoutCart = async (req, res) => {
 
     await order.save();
 
-    // Notification pour la boutique
     addNotification({
       type: 'new_order',
       message: `📦 Nouvelle commande reçue (ID: ${order._id})`,
       referenceId: order._id,
-      shopId
+      shopId: cart.shopId
     });
 
-    // Vider le panier
     cart.products = [];
     await cart.save();
 
     res.status(201).json({ message: 'Commande créée', order });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ error: err.message });
   }
 };

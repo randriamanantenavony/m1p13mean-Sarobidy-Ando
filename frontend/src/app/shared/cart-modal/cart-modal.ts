@@ -88,4 +88,21 @@ updateTotalItems() {
     });
   }
 
+ checkoutCart(cartId: string) {
+    if (!confirm('Voulez-vous vraiment passer la commande pour ce panier ?')) return;
+
+    this.loading = true;
+    this.cartService.checkoutCart(cartId).subscribe({
+      next: (res) => {
+        alert('Commande passée avec succès !');
+        this.loadCart(); // recharge le panier pour afficher vide
+      },
+      error: (err) => {
+        alert('Erreur lors du passage de la commande : ' + err.error?.error || err.message);
+        this.loading = false;
+      }
+    });
+  }
+  
+
 }
