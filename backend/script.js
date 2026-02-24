@@ -1,32 +1,40 @@
+// fixCategoryIds.js
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const Category = require('./models/Category_products');
+const Shop = require('./models/boutique/Shop'); // ton modèle Shop
 
 dotenv.config();
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connecté'))
-  .catch(err => console.error(err));
+  .catch(err => console.error('Erreur de connexion :', err));
 
-const categories = [
-  { name: 'mode', description: 'Vêtements et accessoires' },
-  { name: 'restauration', description: 'Food court, café' },
-  { name: 'electronique', description: 'Gadgets et appareils' },
-  { name: 'beaute', description: 'Cosmétiques, salons' },
-  { name: 'services', description: 'Banque, assurance, services' },
-  { name: 'divertissement', description: 'Cinéma, loisirs' }
-];
-
-const seedCategories = async () => {
+const fixCategoryIds = async () => {
   try {
-    await Category.deleteMany(); // vide la collection avant insertion (optionnel)
-    const created = await Category.insertMany(categories);
-    console.log('Catégories insérées :', created);
-    process.exit();
+    console.log('--- Début fixCategoryIds ---');
+
+    const ObjectId = mongoose.Types.ObjectId;
+
+    // Récupérer tous les shops
+    const shops = await Shop.find();
+    console.log(`Nombre de shops trouvés : ${shops.length}`);
+
+    for (const shop of shops) {
+      // Vérifier si categoryId est un string
+      if (shop.categoryId && typeof shop.categoryId === 'string') {
+        console.log(`Conversion shop ${shop.name} : ${shop.categoryId} => ObjectId`);
+        shop.categoryId = new ObjectId(shop.categoryId);
+        await shop.save();
+      }
+    }
+
+    console.log('✅ Tous les categoryId ont été corrigés.');
+    console.log('--- Fin fixCategoryIds ---');
   } catch (err) {
-    console.error(err);
-    process.exit(1);
+    console.error('❌ Erreur :', err);
+  } finally {
+    mongoose.disconnect();
   }
 };
 
-seedCategories();
+fixCategoryIds();
