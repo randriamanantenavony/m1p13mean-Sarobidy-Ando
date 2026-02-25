@@ -18,4 +18,13 @@ export class OrderService {
   validateOrder(orderId: string): Observable<any> {
     return this.http.put(`${this.validateOrderUrl}/${orderId}`, {});
   }
+
+  markAsPaid(orderId: string) {
+  return this.http.put(
+    `http://localhost:5000/api/orders/${orderId}/pay`,
+    {}
+  );
+}
+
+
 }

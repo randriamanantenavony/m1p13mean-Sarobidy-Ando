@@ -113,3 +113,31 @@ exports.deleteOrder = async (req, res) => {
     res.status(500).json({ error: err.message });
   }
 };
+
+
+exports.markAsPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Commande non trouvée' });
+    }
+
+    // sécurité : on ne peut payer que si confirmed
+    if (order.status !== 'validated') {
+      return res.status(400).json({
+        message: 'Seules les commandes confirmées peuvent être payées'
+      });
+    }
+
+    order.paymentStatus = 'paid';
+    order.paymentDate = new Date();
+
+    await order.save();
+
+    res.status(200).json({ message: 'Commande marquée comme payée' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

@@ -55,4 +55,27 @@ export class ListOrdersComponent implements OnInit {
         }
       });
   }
+
+  markAsPaid(orderId: string) {
+
+  const confirmed = confirm(
+    '⚠️ Cette action est irréversible.\n\nConfirmer le paiement ?'
+  );
+
+  if (!confirmed) return;
+
+  this.orderService.markAsPaid(orderId)
+    .subscribe({
+      next: () => {
+        alert('Paiement enregistré 💳');
+        this.loadOrders(); // refresh automatique
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erreur lors de la mise à jour');
+      }
+    });
+}
+
+
 }
