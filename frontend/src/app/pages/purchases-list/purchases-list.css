@@ -146,14 +146,6 @@ p:only-child::before {
     font-size: 13px;
   }
 
-  /* Sur mobile, cacher certaines colonnes si nécessaire */
-  /* Décommenter si besoin de masquer des colonnes sur petit écran */
-  /*
-  thead th:nth-child(5),
-  tbody td:nth-child(5) {
-    display: none;
-  }
-  */
 }
 
 /* === Animation d'entrée === */
