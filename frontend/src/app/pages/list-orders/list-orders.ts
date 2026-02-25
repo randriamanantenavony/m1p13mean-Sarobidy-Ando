@@ -77,5 +77,24 @@ export class ListOrdersComponent implements OnInit {
     });
 }
 
+markAsDelivered(orderId: string) {
+  const confirmed = confirm(
+    '⚠️ Cette action est irréversible. Commencer la livraison ?'
+  );
+
+  if (!confirmed) return;
+
+  this.orderService.markAsDelivered(orderId)
+    .subscribe({
+      next: () => {
+        alert('Commande livrée ✅');
+        this.loadOrders(); // auto-refresh
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erreur livraison');
+      }
+    });
+}
 
 }

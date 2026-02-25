@@ -6,6 +6,7 @@ const deliveryController = require('../controllers/deliveryController');
 router.put('/shop/:orderId', deliveryController.updateDeliveryByShop);
 router.get('/shop/:shopId', deliveryController.getDeliveriesByShop);
 
+router.put('/:id/deliver', deliveryController.markAsDelivered);
 // Côté client
 router.put('/client/:orderId/confirm', deliveryController.confirmDeliveryByClient);
 

@@ -47,6 +47,18 @@
   </span>
 </td>
 
+<td>
+  <button
+    *ngIf="order.paymentStatus === 'paid' && order.deliveryStatus !== 'delivered'"
+    (click)="markAsDelivered(order._id)">
+    Commencer la livraison
+  </button>
+
+  <span *ngIf="order.deliveryStatus === 'delivered'" class="delivered-badge">
+    ✔ Livré
+  </span>
+</td>
+
 
     </tr>
   </tbody>
