@@ -1,0 +1,43 @@
+<!-- pages/orders/list-orders.html -->
+<h3>Commandes de la boutique</h3>
+
+<table *ngIf="!loading; else loadingTpl">
+  <thead>
+    <tr>
+      <th>Client</th>
+      <th>Produits</th>
+      <th>Quantité</th>
+      <th>Total</th>
+      <th>Status</th>
+      <th>Status payement</th>
+      <th>Status de livraison</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let order of orders">
+      <td>{{ order.customerId?.name || 'Anonyme' }} <br>{{ order.customerId?.email || 'Anonyme' }} <br>{{ order.customerId?.phone || 'Anonyme' }}</td>
+      <td>
+        <ul>
+          <li *ngFor="let p of order.products">
+            {{ p.productId.name }} - {{ p.quantity }}
+          </li>
+        </ul>
+      </td>
+      <td>{{ order.totalQuantity }}</td>
+      <td>{{ order.totalAmount }}</td>
+      <td>{{ order.status }}</td>
+       <td>{{ order.paymentStatus }}</td>
+       <td>{{ order.deliveryStatus }}</td>
+        <td>
+        <button *ngIf="order.status === 'pending'" (click)="validateOrder(order._id)">
+          Valider
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<ng-template #loadingTpl>
+  <p>Chargement des commandes...</p>
+</ng-template>
