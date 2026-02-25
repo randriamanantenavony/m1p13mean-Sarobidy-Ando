@@ -34,6 +34,22 @@
           Valider
         </button>
       </td>
+
+      <td>
+  <button
+  *ngIf="order.status === 'confirmed' && order.paymentStatus !== 'paid'"
+  (click)="markAsPaid(order._id)">
+  Marquer comme payé
+</button>
+
+  <button
+    *ngIf="order.status === 'pending'"
+    (click)="validateOrder(order._id)">
+    Valider
+  </button>
+</td>
+
+
     </tr>
   </tbody>
 </table>
