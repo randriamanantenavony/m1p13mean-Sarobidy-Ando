@@ -26,5 +26,8 @@ export class OrderService {
   );
 }
 
+markAsDelivered(orderId: string) {
+  return this.http.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {});
+}
 
 }
