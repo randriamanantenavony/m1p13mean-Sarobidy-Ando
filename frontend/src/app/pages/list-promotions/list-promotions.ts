@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { PromotionService } from '../../services/promotions/promotion';
 import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -11,9 +11,9 @@ import { CommonModule } from '@angular/common';
 })
 export class ListPromotions implements OnInit {
 
-  promotions: any[] = [];
+  @Input() promotions: any[] = [];
   loading = true;
-  shopId = '698b04d85bfcbccb80e5e06a'; // boutique actuelle
+  shopId = '698b04d85bfcbccb80e5e06a'; 
 
   constructor(private promoService: PromotionService) {}
 

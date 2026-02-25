@@ -16,7 +16,8 @@ export class PromotionFormComponent implements OnInit {
   promotionForm!: FormGroup;
   loading = false;
   products: any[] = [];
-  shopId = '698b04d85bfcbccb80e5e06a'; // id boutique actuelle
+  shopId = '698b04d85bfcbccb80e5e06a';
+  promotions: any[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -36,6 +37,7 @@ export class PromotionFormComponent implements OnInit {
     });
 
     this.loadProducts();
+    this.loadPromotions();
   }
 
   loadProducts() {
@@ -72,6 +74,7 @@ showConfirmModal() {
         next: res => {
           alert('Promotion enregistrée avec succès !');
           this.promotionForm.reset({ shopId: this.shopId, discountPercent: 0 });
+          this.loadPromotions(),
           this.loading = false;
         },
         error: err => {
@@ -81,4 +84,13 @@ showConfirmModal() {
         }
       });
   }
+
+  loadPromotions() {
+  this.promoService.getPromotionsByShop(this.shopId)
+    .subscribe({
+      next: (data) => this.promotions = data,
+      error: (err) => console.error('Erreur récupération promotions', err)
+    });
+}
+
 }
