@@ -41,4 +41,18 @@ export class PromotionService {
   getActivePromotions(): Observable<Promotion[]> {
     return this.http.get<Promotion[]>(this.apiUrl);
   }
+
+  createPromotion(promotionData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, promotionData);
+  }
+
+    getPromotionsByShop(shopId: string) {
+      return this.http.get<Promotion[]>(
+        `${this.apiUrl}/shop/${shopId}`
+      );
+    }
+
+  deletePromotion(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
 }
