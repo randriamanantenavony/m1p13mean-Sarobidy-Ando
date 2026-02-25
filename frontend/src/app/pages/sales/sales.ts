@@ -4,11 +4,12 @@ import { CommonModule } from '@angular/common';
 import { ProductService } from '../../services/products/product';
 import { Customers } from '../../services/customer/customers';
 import { SalesService } from '../../services/sales/sales';
+import { SalesListComponent } from "../liste-ventes/liste-ventes";
 
 
 @Component({
   selector: 'app-sales',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, SalesListComponent],
   templateUrl: './sales.html',
   styleUrl: './sales.css',
 })
@@ -83,6 +84,14 @@ loadProducts() {
 
   onSubmit() {
     if (this.saleForm.invalid) return;
+
+     const confirmSave = window.confirm(
+    '⚠️ Cette action est irréversible ! Êtes-vous sûr de vouloir enregistrer cette vente ?'
+      );
+
+      if (!confirmSave) {
+        return;
+      }
 
     this.loading = true;
     const saleData = {
