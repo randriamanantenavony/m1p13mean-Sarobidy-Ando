@@ -27,3 +27,11 @@ button {
 button:hover {
   background-color: #2563eb;
 }
+
+.paid-badge {
+  background: #28a745;
+  color: white;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 12px;
+}

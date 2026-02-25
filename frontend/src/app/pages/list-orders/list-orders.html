@@ -36,17 +36,15 @@
       </td>
 
       <td>
-  <button
-  *ngIf="order.status === 'confirmed' && order.paymentStatus !== 'paid'"
-  (click)="markAsPaid(order._id)">
-  Marquer comme payé
-</button>
-
-  <button
-    *ngIf="order.status === 'pending'"
-    (click)="validateOrder(order._id)">
-    Valider
-  </button>
+        <button
+    *ngIf="order.status === 'validated' && order.paymentStatus !== 'paid'"
+    (click)="markAsPaid(order._id)">
+    Marquer comme payé
+  </button></td>
+<td>
+  <span *ngIf="order.paymentStatus === 'paid'" class="paid-badge">
+    ✔ Payé
+  </span>
 </td>
 
 
