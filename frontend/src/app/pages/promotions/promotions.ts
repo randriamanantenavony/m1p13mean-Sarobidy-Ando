@@ -4,10 +4,11 @@ import { Component, EventEmitter, OnDestroy, OnInit, Output, ElementRef, Inject 
 import { ChangeDetectorRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ShopService } from '../../services/shop';
+import { ListPromotions } from '../list-promotions/list-promotions';
 
 @Component({
   selector: 'app-promotions',
-  imports: [CommonModule, NgIf, NgForOf],
+  imports: [CommonModule, NgIf, NgForOf, ListPromotions],
   templateUrl: './promotions.html',
   styleUrl: './promotions.css',
 })
