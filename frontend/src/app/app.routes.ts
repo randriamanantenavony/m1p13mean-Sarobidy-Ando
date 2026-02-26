@@ -8,6 +8,7 @@ import { SaleFormComponent } from './pages/sales/sales';
 import { PromotionFormComponent } from './pages/create-promotions/create-promotions';
 import { ListPromotions } from './pages/list-promotions/list-promotions';
 import { ListOrdersComponent } from './pages/list-orders/list-orders';
+import { Notifications } from './pages/notifications/notifications';
 
 export const routes: Routes = [
     {path : 'login', component : Dashboard},
@@ -18,6 +19,7 @@ export const routes: Routes = [
     {path : 'sales', component : SaleFormComponent},
     {path : 'promo', component :  PromotionFormComponent},
     {path : 'liste-promo', component : ListPromotions},
+    {path : 'liste-notif', component : Notifications},
     {path : 'liste-order', component : ListOrdersComponent},
     {path :'', redirectTo: '/login', pathMatch : 'full'}
 ];
