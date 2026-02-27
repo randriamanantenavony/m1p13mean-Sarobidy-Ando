@@ -10,9 +10,10 @@ import { ListPromotions } from './pages/list-promotions/list-promotions';
 import { ListOrdersComponent } from './pages/list-orders/list-orders';
 import { Notifications } from './pages/notifications/notifications';
 import { ShopNavbarComponent } from './pages/navbar-boutique/navbar-boutique';
+import { DashboardBoutique } from './pages/dashboard/dashboard';
+import { BoutiqueMain } from './pages/boutique-main/boutique-main';
 
 export const routes: Routes = [
-    {path : 'login', component : Dashboard},
     {path : 'shop-list', component : ShopList},
     {path : 'products-boutiques', component : ShopProducts},
     {path : 'create-products', component : ShopProductCreate},
@@ -23,5 +24,7 @@ export const routes: Routes = [
     {path : 'liste-notif', component : Notifications},
     {path : 'liste-order', component : ListOrdersComponent},
     {path : 'navbar', component : ShopNavbarComponent},
-    {path :'', redirectTo: '/login', pathMatch : 'full'}
+    {path : 'dashboard', component : DashboardBoutique},
+    {path : 'boutique/main', component : BoutiqueMain},
+    {path :'', redirectTo: '/boutique/main', pathMatch : 'full'}
 ];
