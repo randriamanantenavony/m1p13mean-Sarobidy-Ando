@@ -1,12 +1,13 @@
 import { ProductService } from './../../services/products/product';
-import { Component } from '@angular/core';
+import { Component,ChangeDetectorRef } from '@angular/core';
 import { Product } from '../../models/product';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-shop-products',
-  imports: [CommonModule, NgIf, NgFor, FormsModule],
+  imports: [CommonModule, NgIf, NgFor, FormsModule,ShopNavbarComponent],
   templateUrl: './shop-products.html',
   styleUrls: ['./shop-products.css'],
 })
@@ -20,7 +21,7 @@ export class ShopProducts {
   selectedProduct!: Product | null;
   isEditModalOpen = false;
 
-  constructor(private productService: ProductService){}
+  constructor(private productService: ProductService, private cdr: ChangeDetectorRef){}
 
   ngOnInit(){
     this.shopId = '698b04d85bfcbccb80e5e06a';
@@ -35,6 +36,7 @@ export class ShopProducts {
         this.products = data;
         console.log('Produits chargés', data);
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);

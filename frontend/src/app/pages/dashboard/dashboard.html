@@ -11,7 +11,7 @@
     </div>
     <div class="dash-date">
       <i class="fa-regular fa-calendar-days"></i>
-      Aujourd'hui
+      {{ today}}
     </div>
   </div>
 
@@ -29,7 +29,7 @@
       </div>
       <div class="card-body">
         <div class="card-label">CA du jour</div>
-        <div class="card-value">{{ caDuJour }} €</div>
+        <div class="card-value">{{ caDuJour }} Ar</div>
       </div>
     </div>
 
@@ -169,7 +169,7 @@
               </div>
             </td>
             <td class="td-muted">{{ c.contact }}</td>
-            <td><span class="pill pill--orange">{{ c.totalSpent }} €</span></td>
+            <td><span class="pill pill--orange">{{ c.totalSpent }} Ar</span></td>
           </tr>
         </tbody>
       </table>
