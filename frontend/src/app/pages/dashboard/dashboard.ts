@@ -1,6 +1,12 @@
 import { Component } from '@angular/core';
 import { DashboardService } from '../../services/dashboard/dashboard';
 import { CommonModule, NgIf } from '@angular/common';
+import { formatDate } from '@angular/common';
+import { registerLocaleData } from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
+
+registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-dashboard',
@@ -19,6 +25,8 @@ export class DashboardBoutique {
   stockParCategorie: any[] = [];
   topArticles: any[] = [];
   topClients: any[] = [];
+
+  today: string = formatDate(new Date(), 'dd/MM/yyyy', 'fr');
 
   constructor(private dashboardService: DashboardService) { }
 

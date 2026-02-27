@@ -1,6 +1,7 @@
 import { Component, HostListener, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ChangeDetectorRef } from '@angular/core';
 
 export interface NavItem {
   label: string;

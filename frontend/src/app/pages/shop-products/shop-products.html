@@ -1,3 +1,4 @@
+<app-shop-navbar></app-shop-navbar>
 <div class="shop-products">
 
   <h2>Produits de la boutique</h2>
@@ -77,10 +78,6 @@
         <button class="btn edit" (click)="editProduct(product)">
           Modifier
         </button>
-
-        <button class="btn delete" (click)="deleteProduct(product._id)">
-          Supprimer
-        </button>
       </div>
 
     </div>
@@ -105,8 +102,14 @@
     <input type="number" [(ngModel)]="selectedProduct!.stock" name="stock" required>
 
     <label>Status</label>
-    <select [(ngModel)]="selectedProduct!.status" name="status">
-      <option value="avalaible">avalaible</option>
+    <select [(ngModel)]="selectedProduct!.status" name="status" class="status-select">
+      <!-- Placeholder -->
+      <option value="" disabled [hidden]="selectedProduct?.status !== ''">
+        ------ Choisir une option -------
+      </option>
+
+      <!-- Options réelles -->
+      <option value="available">Disponible</option>
       <option value="inactive">Inactif</option>
     </select>
 
