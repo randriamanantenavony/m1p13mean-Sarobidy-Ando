@@ -9,6 +9,7 @@ import { PromotionFormComponent } from './pages/create-promotions/create-promoti
 import { ListPromotions } from './pages/list-promotions/list-promotions';
 import { ListOrdersComponent } from './pages/list-orders/list-orders';
 import { Notifications } from './pages/notifications/notifications';
+import { ShopNavbarComponent } from './pages/navbar-boutique/navbar-boutique';
 
 export const routes: Routes = [
     {path : 'login', component : Dashboard},
@@ -21,5 +22,6 @@ export const routes: Routes = [
     {path : 'liste-promo', component : ListPromotions},
     {path : 'liste-notif', component : Notifications},
     {path : 'liste-order', component : ListOrdersComponent},
+    {path : 'navbar', component : ShopNavbarComponent},
     {path :'', redirectTo: '/login', pathMatch : 'full'}
 ];

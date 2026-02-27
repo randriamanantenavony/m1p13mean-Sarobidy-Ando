@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ma Boutique</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
+
+<nav class="navbar">
+
+  <!-- Logo -->
+  <div class="logo">
+    <i class="fa-solid fa-bag-shopping"></i>
+    Ma Boutique
+  </div>
+
+  <!-- Hamburger -->
+  <input type="checkbox" id="menu-toggle"/>
+  <label for="menu-toggle" class="hamburger">
+    <span></span><span></span><span></span>
+  </label>
+
+  <ul class="nav-links">
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-box-open"></i> Catalogue
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-tag"></i> Articles</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-cart-flatbed"></i> Achats
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-file-invoice-dollar"></i> Gestion achat</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-cash-register"></i> Ventes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-pen-to-square"></i> Enregistrer une vente</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-warehouse"></i> Stocks
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-chart-bar"></i> Stocks en temps réel</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-bullhorn"></i> Promos
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-percent"></i> Proposition de promotions</li>
+        <li><i class="fa-solid fa-star"></i> Mise en avant client</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-truck-fast"></i> Commandes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-circle-check"></i> Validation commande</li>
+        <li><i class="fa-solid fa-rotate"></i> Mise à jour stock</li>
+        <li><i class="fa-solid fa-map-location-dot"></i> Suivi livraison</li>
+      </ul>
+    </li>
+
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-bell"></i> Alertes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-bag-shopping"></i> Nouvelles commandes</li>
+        <li><i class="fa-solid fa-triangle-exclamation"></i> Stock faible</li>
+      </ul>
+    </li>
+
+    <li class="no-dropdown">
+      <span class="nav-item active">
+        <i class="fa-solid fa-gauge-high"></i> Dashboard
+      </span>
+    </li>
+
+  </ul>
+</nav>
+
+</body>
+</html>
