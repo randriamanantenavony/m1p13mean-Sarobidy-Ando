@@ -1,259 +1,112 @@
-<!-- Barre de navigation principale -->
-<nav class="navbar"
-     [class.navbar--scrolled]="isScrolled">
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ma Boutique</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+</head>
+<body>
 
-  <!-- ══ BRAND ════════════════════════════════════════════ -->
-  <a class="navbar__brand" routerLink="/dashboard" (click)="closeMobileMenu()">
-    <span class="navbar__brand-icon">
-      <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21"
-           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
-        <polyline points="9 22 9 12 15 12 15 22"/>
-      </svg>
-    </span>
-    <span class="navbar__brand-name">{{ shopName }}</span>
-  </a>
+<nav class="navbar">
 
-  <!-- ══ NAV DESKTOP ══════════════════════════════════════ -->
-  <ul class="navbar__nav">
-    <li *ngFor="let item of navItems" class="navbar__nav-item">
+  <!-- Logo -->
+  <div class="logo">
+    <i class="fa-solid fa-bag-shopping"></i>
+    Ma Boutique
+  </div>
 
-      <!-- Lien simple -->
-      <a *ngIf="!item.children?.length"
-         class="navbar__nav-link"
-         [routerLink]="item.route"
-         routerLinkActive="navbar__nav-link--active"
-         [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }">
-        <span class="navbar__nav-icon" [innerHTML]="item.icon"></span>
-        <span>{{ item.label }}</span>
-      </a>
+  <!-- Hamburger -->
+  <input type="checkbox" id="menu-toggle"/>
+  <label for="menu-toggle" class="hamburger">
+    <span></span><span></span><span></span>
+  </label>
 
-      <!-- Lien avec dropdown -->
-      <button *ngIf="item.children?.length"
-              class="navbar__nav-link"
-              [class.navbar__nav-link--open]="openDropdown === item.label"
-              (click)="toggleDropdown(item.label, $event)">
-        <span class="navbar__nav-icon" [innerHTML]="item.icon"></span>
-        <span>{{ item.label }}</span>
-        <span class="navbar__chevron"
-              [class.navbar__chevron--open]="openDropdown === item.label">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </span>
-      </button>
+  <ul class="nav-links">
 
-      <!-- Dropdown panel -->
-      <ul *ngIf="item.children?.length"
-          class="navbar__dropdown"
-          [class.navbar__dropdown--open]="openDropdown === item.label">
-        <li *ngFor="let child of item.children">
-          <a class="navbar__dropdown-link"
-             [routerLink]="child.route"
-             routerLinkActive="navbar__dropdown-link--active"
-             (click)="openDropdown = null">
-            {{ child.label }}
-          </a>
-        </li>
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-box-open"></i> Catalogue
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-tag"></i> Articles</li>
       </ul>
-
     </li>
-  </ul>
 
-  <!-- ══ ACTIONS DROITE ═══════════════════════════════════ -->
-  <div class="navbar__actions">
-
-    <!-- Notifications -->
-    <a class="navbar__action-btn"
-       routerLink="/notifications"
-       routerLinkActive="navbar__action-btn--active"
-       title="Notifications">
-      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20"
-           viewBox="0 0 24 24" fill="none" stroke="currentColor"
-           stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-      </svg>
-      <span *ngIf="unreadCount > 0" class="navbar__badge">{{ badgeDisplay }}</span>
-    </a>
-
-    <!-- Profil (desktop uniquement, caché sur mobile) -->
-    <div class="navbar__profile-wrap navbar__nav-item">
-      <button class="navbar__profile"
-              (click)="toggleDropdown('__profile__', $event)">
-        <span *ngIf="!avatarUrl" class="navbar__avatar">{{ initials }}</span>
-        <img   *ngIf="avatarUrl"  [src]="avatarUrl" [alt]="shopName" class="navbar__avatar-img"/>
-        <span class="navbar__chevron"
-              [class.navbar__chevron--open]="openDropdown === '__profile__'">
-          <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-            <polyline points="6 9 12 15 18 9"/>
-          </svg>
-        </span>
-      </button>
-
-      <ul class="navbar__dropdown navbar__dropdown--right"
-          [class.navbar__dropdown--open]="openDropdown === '__profile__'">
-        <li class="navbar__dropdown-header">
-          <span class="navbar__dropdown-shopname">{{ shopName }}</span>
-          <span class="navbar__dropdown-role">Commerçant</span>
-        </li>
-        <li class="navbar__dropdown-divider"></li>
-        <li>
-          <a class="navbar__dropdown-link" routerLink="/profil" (click)="openDropdown = null">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-              <circle cx="12" cy="7" r="4"/>
-            </svg>
-            Mon Profil
-          </a>
-        </li>
-        <li>
-          <a class="navbar__dropdown-link" routerLink="/parametres" (click)="openDropdown = null">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <circle cx="12" cy="12" r="3"/>
-              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-            </svg>
-            Paramètres
-          </a>
-        </li>
-        <li class="navbar__dropdown-divider"></li>
-        <li>
-          <a class="navbar__dropdown-link navbar__dropdown-link--danger"
-             routerLink="/logout" (click)="openDropdown = null">
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
-              <polyline points="16 17 21 12 16 7"/>
-              <line x1="21" y1="12" x2="9" y2="12"/>
-            </svg>
-            Déconnexion
-          </a>
-        </li>
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-cart-flatbed"></i> Achats
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-file-invoice-dollar"></i> Gestion achat</li>
       </ul>
-    </div>
+    </li>
 
-    <!-- Bouton Hamburger — visible uniquement sur mobile via CSS -->
-    <button class="navbar__hamburger"
-            [class.navbar__hamburger--open]="isMobileMenuOpen"
-            (click)="toggleMobileMenu()"
-            aria-label="Menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-cash-register"></i> Ventes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-pen-to-square"></i> Enregistrer une vente</li>
+      </ul>
+    </li>
 
-  </div>
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-warehouse"></i> Stocks
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-chart-bar"></i> Stocks en temps réel</li>
+      </ul>
+    </li>
 
-  <!-- ══ MENU MOBILE ══════════════════════════════════════ -->
-  <div class="navbar__mobile-menu"
-       [class.navbar__mobile-menu--open]="isMobileMenuOpen">
-    <ul class="navbar__mobile-nav">
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-bullhorn"></i> Promos
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-percent"></i> Proposition de promotions</li>
+        <li><i class="fa-solid fa-star"></i> Mise en avant client</li>
+      </ul>
+    </li>
 
-      <li *ngFor="let item of navItems">
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-truck-fast"></i> Commandes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-circle-check"></i> Validation commande</li>
+        <li><i class="fa-solid fa-rotate"></i> Mise à jour stock</li>
+        <li><i class="fa-solid fa-map-location-dot"></i> Suivi livraison</li>
+      </ul>
+    </li>
 
-        <!-- Lien simple (mobile) -->
-        <a *ngIf="!item.children?.length"
-           class="navbar__mobile-link"
-           [routerLink]="item.route"
-           routerLinkActive="navbar__mobile-link--active"
-           [routerLinkActiveOptions]="{ exact: item.route === '/dashboard' }"
-           (click)="closeMobileMenu()">
-          <span class="navbar__nav-icon" [innerHTML]="item.icon"></span>
-          {{ item.label }}
-        </a>
+    <li>
+      <span class="nav-item">
+        <i class="fa-solid fa-bell"></i> Alertes
+        <i class="fa-solid fa-chevron-down arrow"></i>
+      </span>
+      <ul class="dropdown">
+        <li><i class="fa-solid fa-bag-shopping"></i> Nouvelles commandes</li>
+        <li><i class="fa-solid fa-triangle-exclamation"></i> Stock faible</li>
+      </ul>
+    </li>
 
-        <!-- Dropdown (mobile) -->
-        <ng-container *ngIf="item.children?.length">
-          <button class="navbar__mobile-link navbar__mobile-link--trigger"
-                  [class.navbar__mobile-link--open]="openDropdown === item.label+'_m'"
-                  (click)="toggleDropdown(item.label+'_m', $event)">
-            <span class="navbar__nav-icon" [innerHTML]="item.icon"></span>
-            {{ item.label }}
-            <span class="navbar__chevron"
-                  [class.navbar__chevron--open]="openDropdown === item.label+'_m'">
-              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12"
-                   viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                   stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-                <polyline points="6 9 12 15 18 9"/>
-              </svg>
-            </span>
-          </button>
-          <ul class="navbar__mobile-sub"
-              [class.navbar__mobile-sub--open]="openDropdown === item.label+'_m'">
-            <li *ngFor="let child of item.children">
-              <a class="navbar__mobile-sublink"
-                 [routerLink]="child.route"
-                 routerLinkActive="navbar__mobile-sublink--active"
-                 (click)="closeMobileMenu()">
-                {{ child.label }}
-              </a>
-            </li>
-          </ul>
-        </ng-container>
+    <li class="no-dropdown">
+      <span class="nav-item active">
+        <i class="fa-solid fa-gauge-high"></i> Dashboard
+      </span>
+    </li>
 
-      </li>
-
-      <!-- Notifications mobile -->
-      <li>
-        <a class="navbar__mobile-link"
-           routerLink="/notifications"
-           routerLinkActive="navbar__mobile-link--active"
-           (click)="closeMobileMenu()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               style="flex-shrink:0;color:var(--azure)">
-            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-          </svg>
-          Notifications
-          <span *ngIf="unreadCount > 0" class="navbar__badge navbar__badge--inline">
-            {{ badgeDisplay }}
-          </span>
-        </a>
-      </li>
-
-      <!-- Profil mobile -->
-      <li class="navbar__mobile-item--profile">
-        <a class="navbar__mobile-link"
-           routerLink="/profil"
-           routerLinkActive="navbar__mobile-link--active"
-           (click)="closeMobileMenu()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               style="flex-shrink:0;color:var(--azure)">
-            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-            <circle cx="12" cy="7" r="4"/>
-          </svg>
-          Mon Profil
-        </a>
-        <a class="navbar__mobile-link"
-           routerLink="/parametres"
-           routerLinkActive="navbar__mobile-link--active"
-           (click)="closeMobileMenu()">
-          <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18"
-               viewBox="0 0 24 24" fill="none" stroke="currentColor"
-               stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
-               style="flex-shrink:0;color:var(--azure)">
-            <circle cx="12" cy="12" r="3"/>
-            <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l-.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
-          </svg>
-          Paramètres
-        </a>
-      </li>
-
-    </ul>
-  </div>
-
+  </ul>
 </nav>
 
-<!-- Overlay sombre derrière le menu mobile -->
-<div class="navbar__overlay"
-     [class.navbar__overlay--visible]="isMobileMenuOpen"
-     (click)="closeMobileMenu()">
-</div>
+</body>
+</html>

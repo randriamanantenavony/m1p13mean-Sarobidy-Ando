@@ -1,546 +1,280 @@
-/* =================================================================
-   ShopNavbarComponent — CSS final, mobile-first, 100% complet
-   ================================================================= */
+/* ── Reset & base ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-/* ── Variables ─────────────────────────────────────────────────── */
-:root {
-  --azure:     #007FFF;
-  --azure-dk:  #0055CC;
-  --azure-lt:  #DDEEFF;
-  --azure-bg:  #F0F7FF;
-  --white:     #FFFFFF;
-  --txt:       #1A2340;
-  --muted:     #5A6A88;
-  --border:    #E0EAF6;
-  --red:       #FF3355;
-  --danger:    #E53E3E;
-  --nav-h:     64px;
-  --ease:      cubic-bezier(.4, 0, .2, 1);
-  --r:         9px;
+body {
+  font-family: 'Inter', sans-serif;
+  background: #f0f6ff;
 }
 
-/* ── Keyframes ─────────────────────────────────────────────────── */
-@keyframes badge-pop {
-  0%,100% { transform: scale(1);    box-shadow: 0 0 0 0   rgba(255,51,85,.5); }
-  50%     { transform: scale(1.18); box-shadow: 0 0 0 6px rgba(255,51,85,0); }
-}
-@keyframes dd-open {
-  from { opacity: 0; transform: translateY(-8px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@keyframes menu-slide {
-  from { opacity: 0; transform: translateY(-10px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ================================================================
-   NAVBAR — barre principale
-   ================================================================ */
+/* ── Navbar ─────────────────────────────────────────────── */
 .navbar {
-  position: fixed;
-  top: 0; left: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #ffffff;
+  padding: 0 1.5rem;
+  height: 62px;
+  border-bottom: 1px solid #ddeeff;
+  box-shadow: 0 4px 24px rgba(0, 100, 255, 0.07);
+  position: sticky;
+  top: 0;
   z-index: 1000;
-  height: var(--nav-h);
-  background: #fff;
-  border-bottom: 1.5px solid var(--border);
+}
+
+/* ── Logo ───────────────────────────────────────────────── */
+.logo {
   display: flex;
   align-items: center;
-  padding: 0 20px;
-  gap: 6px;
-  transition: box-shadow .3s var(--ease), border-color .3s var(--ease);
-}
-
-.navbar--scrolled {
-  box-shadow: 0 4px 24px rgba(0,127,255,.13);
-  border-bottom-color: transparent;
-}
-
-/* ================================================================
-   BRAND
-   ================================================================ */
-.navbar__brand {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  text-decoration: none;
-  flex-shrink: 0;
-}
-
-.navbar__brand-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 38px;
-  height: 38px;
-  min-width: 38px;
-  background: linear-gradient(135deg, var(--azure), var(--azure-dk));
-  color: #fff;
-  border-radius: 11px;
-  box-shadow: 0 3px 12px rgba(0,127,255,.35);
-  transition: transform .25s var(--ease);
-}
-
-.navbar__brand-icon:hover { transform: scale(1.07) rotate(-3deg); }
-
-.navbar__brand-name {
-  font-size: .95rem;
-  font-weight: 800;
-  color: var(--txt);    /* couleur solide, jamais de clip-gradient ici */
-  letter-spacing: -.02em;
-  white-space: nowrap;
-}
-
-/* ================================================================
-   NAV DESKTOP
-   ================================================================ */
-.navbar__nav {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-  list-style: none;
-  margin: 0;
-  padding: 0 0 0 12px;
-  flex: 1;
-  overflow-x: auto;
-  scrollbar-width: none;
-}
-.navbar__nav::-webkit-scrollbar { display: none; }
-
-.navbar__nav-item { position: relative; }
-
-/* Lien nav */
-.navbar__nav-link {
-  position: relative;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 7px 13px;
-  border-radius: var(--r);
-  font-size: .875rem;
-  font-weight: 600;
-  color: var(--muted);
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  white-space: nowrap;
-  font-family: inherit;
-  transition: color .2s var(--ease), background .2s var(--ease), transform .18s var(--ease);
-  line-height: 1;
-}
-
-/* Trait bleu animé en bas */
-.navbar__nav-link::after {
-  content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
-  height: 2px;
-  width: 0;
-  background: linear-gradient(90deg, var(--azure), var(--azure-dk));
-  border-radius: 2px;
-  transition: width .28s var(--ease);
-}
-
-.navbar__nav-link:hover {
-  color: var(--azure);
-  background: var(--azure-bg);
-  transform: translateY(-1px);
-}
-.navbar__nav-link:hover::after { width: 50%; }
-
-.navbar__nav-link--active {
-  color: var(--azure) !important;
-  background: var(--azure-lt) !important;
+  gap: 0.5rem;
   font-weight: 700;
-}
-.navbar__nav-link--active::after { width: 50%; }
-
-.navbar__nav-link--open {
-  color: var(--azure);
-  background: var(--azure-bg);
-}
-
-/* Icône nav — bleue */
-.navbar__nav-icon {
-  display: flex;
-  align-items: center;
-  color: var(--azure);
-  opacity: .6;
-  flex-shrink: 0;
-  transition: opacity .2s, transform .2s var(--ease);
-}
-.navbar__nav-link:hover .navbar__nav-icon,
-.navbar__nav-link--active .navbar__nav-icon { opacity: 1; transform: scale(1.1); }
-
-/* Chevron — bleu */
-.navbar__chevron {
-  display: flex;
-  align-items: center;
-  margin-left: 1px;
-  color: var(--azure);
-  opacity: .5;
-  transition: transform .22s var(--ease), opacity .2s;
-}
-.navbar__chevron--open { transform: rotate(180deg); opacity: 1; }
-
-/* ================================================================
-   DROPDOWN
-   ================================================================ */
-.navbar__dropdown {
-  position: absolute;
-  top: calc(100% + 10px);
-  left: 0;
-  min-width: 230px;
-  background: #fff;
-  border: 1.5px solid var(--border);
-  border-top: 3px solid var(--azure);
-  border-radius: 13px;
-  box-shadow: 0 10px 40px rgba(0,127,255,.18);
-  list-style: none;
-  padding: 7px;
-  margin: 0;
-  z-index: 300;
-  /* Caché via visibility — PAS display:none → transitions OK */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-8px);
-  transition: opacity .2s var(--ease), visibility .2s, transform .2s var(--ease);
-}
-
-.navbar__dropdown--right { left: auto; right: 0; min-width: 215px; }
-
-.navbar__dropdown--open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
-  transform: translateY(0);
-}
-
-.navbar__dropdown-header {
-  padding: 11px 14px 9px;
-  background: var(--azure-bg);
-  border-radius: 8px;
-  margin-bottom: 4px;
-}
-.navbar__dropdown-shopname { font-size: .88rem; font-weight: 800; color: var(--txt); display: block; }
-.navbar__dropdown-role     { font-size: .7rem;  font-weight: 700; color: var(--azure); text-transform: uppercase; letter-spacing: .06em; }
-.navbar__dropdown-divider  { height: 1px; background: var(--border); margin: 5px 6px; }
-
-.navbar__dropdown-link {
-  display: flex;
-  align-items: center;
-  gap: 9px;
-  padding: 9px 13px;
-  border-radius: var(--r);
-  font-size: .86rem;
-  font-weight: 500;
-  color: var(--txt);
-  text-decoration: none;
-  transition: background .18s var(--ease), color .18s var(--ease), transform .16s var(--ease);
-}
-.navbar__dropdown-link svg { color: var(--azure); opacity: .55; flex-shrink: 0; transition: opacity .18s; }
-.navbar__dropdown-link:hover { background: var(--azure-bg); color: var(--azure); transform: translateX(3px); }
-.navbar__dropdown-link:hover svg { opacity: 1; }
-.navbar__dropdown-link--active { color: var(--azure); background: var(--azure-lt); }
-.navbar__dropdown-link--danger { color: var(--danger); }
-.navbar__dropdown-link--danger svg { color: var(--danger); }
-.navbar__dropdown-link--danger:hover { background: #FFF0F0; color: #C00; transform: translateX(3px); }
-
-/* ================================================================
-   ACTIONS DROITE (notifications, profil)
-   ================================================================ */
-.navbar__actions {
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  margin-left: auto;
+  font-size: 1.15rem;
+  background: linear-gradient(135deg, #0062ff, #00b4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
   flex-shrink: 0;
 }
 
-/* Bouton icône */
-.navbar__action-btn {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 40px;
-  height: 40px;
-  border-radius: var(--r);
-  color: var(--muted);
-  text-decoration: none;
-  transition: color .2s var(--ease), background .2s var(--ease), transform .18s var(--ease);
-}
-.navbar__action-btn:hover {
-  background: var(--azure-bg);
-  color: var(--azure);
-  transform: translateY(-2px);
-}
-.navbar__action-btn--active { color: var(--azure); background: var(--azure-lt); }
-
-/* Badge rouge */
-.navbar__badge {
-  position: absolute;
-  top: 2px; right: 2px;
-  min-width: 18px;
-  height: 18px;
-  padding: 0 4px;
-  background: linear-gradient(135deg, #FF3355, #EE0033);
-  color: #fff;
-  font-size: .62rem;
-  font-weight: 800;
-  border-radius: 99px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2px solid #fff;
-  animation: badge-pop 2.2s ease-in-out infinite;
-  line-height: 1;
-}
-.navbar__badge--inline {
-  position: static;
-  margin-left: auto;
-  border: none;
-  animation: none;
+.logo i {
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #0062ff, #00b4ff);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
-/* Profil */
-.navbar__profile-wrap { position: relative; }
+/* ── Hamburger custom (3 barres) ────────────────────────── */
+#menu-toggle { display: none; }
 
-.navbar__profile {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-  padding: 4px 9px 4px 4px;
-  border-radius: var(--r);
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  transition: background .2s var(--ease);
-}
-.navbar__profile:hover { background: var(--azure-bg); }
-
-/* Avatar bleu dégradé */
-.navbar__avatar {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--azure), var(--azure-dk));
-  color: #fff;
-  font-size: .76rem;
-  font-weight: 800;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  animation: 4s ease-in-out infinite alternate;
-  box-shadow: 0 2px 10px rgba(0,127,255,.38);
-}
-
-.navbar__avatar-img {
-  width: 34px;
-  height: 34px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 2px solid var(--azure-lt);
-}
-
-/* ================================================================
-   HAMBURGER
-   Par défaut : caché. Affiché seulement sur petit écran via media query.
-   ================================================================ */
-.navbar__hamburger {
-  display: none;   /* ← affiché sur mobile via media query plus bas */
+.hamburger {
+  display: none;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   gap: 5px;
-  width: 40px;
-  height: 40px;
-  border: none;
-  background: transparent;
   cursor: pointer;
-  border-radius: var(--r);
-  padding: 0;
-  flex-shrink: 0;
-  transition: background .2s var(--ease);
+  padding: 6px;
+  border-radius: 8px;
+  transition: background 0.2s;
+  z-index: 10;
 }
-/* Barres bleues */
-.navbar__hamburger span {
+.hamburger:hover { background: #e8f0fe; }
+.hamburger span {
   display: block;
   width: 22px;
-  height: 2.5px;
-  background: linear-gradient(90deg, var(--azure), var(--azure-dk));
-  border-radius: 3px;
-  transform-origin: center;
-  transition: transform .28s var(--ease), opacity .22s, width .22s;
+  height: 2px;
+  background: #0062ff;
+  border-radius: 2px;
+  transition: all 0.3s ease;
 }
-.navbar__hamburger:hover { background: var(--azure-bg); }
-.navbar__hamburger:hover span:nth-child(2) { width: 16px; }
-.navbar__hamburger:hover span:nth-child(3) { width: 10px; }
-/* État ouvert → croix */
-.navbar__hamburger--open span:nth-child(1) { transform: translateY(7.5px) rotate(45deg); }
-.navbar__hamburger--open span:nth-child(2) { opacity: 0; width: 0; }
-.navbar__hamburger--open span:nth-child(3) { transform: translateY(-7.5px) rotate(-45deg); width: 22px; }
 
-/* ================================================================
-   OVERLAY (fond flouté derrière le menu mobile)
-   Caché via opacity/visibility — PAS display:none
-   ================================================================ */
-.navbar__overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 998;
-  background: rgba(10, 30, 80, .28);
-  backdrop-filter: blur(3px);
-  /* Fermé */
+/* Animation hamburger → croix */
+#menu-toggle:checked + .hamburger span:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+#menu-toggle:checked + .hamburger span:nth-child(2) {
   opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transition: opacity .28s var(--ease), visibility .28s;
 }
-.navbar__overlay--visible {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
+#menu-toggle:checked + .hamburger span:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
 }
 
-/* ================================================================
-   MENU MOBILE
-   Caché via opacity/visibility/transform — PAS display:none
-   (display:none empêche toute transition CSS)
-   ================================================================ */
-.navbar__mobile-menu {
-  position: fixed;
-  top: var(--nav-h);
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-top: 3px solid var(--azure);
-  box-shadow: 0 14px 48px rgba(0,127,255,.18);
-  z-index: 999;
-  max-height: calc(100vh - var(--nav-h));
-  overflow-y: auto;
-  padding: 14px 16px 28px;
-  /* État fermé */
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-  transform: translateY(-12px);
-  transition: opacity .28s var(--ease), visibility .28s, transform .28s var(--ease);
-}
-.navbar__mobile-menu--open {
-  opacity: 1;
-  visibility: visible;
-  pointer-events: all;
-  transform: translateY(0);
-}
-
-/* Liste mobile */
-.navbar__mobile-nav {
+/* ── Nav links ──────────────────────────────────────────── */
+.nav-links {
   list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-/* Séparateur avant profil */
-.navbar__mobile-item--profile {
-  border-top: 1.5px solid var(--border);
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-/* Lien mobile */
-.navbar__mobile-link {
   display: flex;
   align-items: center;
-  gap: 12px;
-  width: 100%;
-  padding: 12px 14px;
-  border-radius: var(--r);
-  font-size: .9rem;
-  font-weight: 600;
-  color: var(--txt);
-  text-decoration: none;
-  background: transparent;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  text-align: left;
-  transition: background .2s var(--ease), color .2s var(--ease), transform .18s var(--ease);
-}
-.navbar__mobile-link .navbar__nav-icon { color: var(--azure); opacity: .6; }
-.navbar__mobile-link:hover {
-  background: var(--azure-bg);
-  color: var(--azure);
-  transform: translateX(4px);
-}
-.navbar__mobile-link:hover .navbar__nav-icon { opacity: 1; }
-.navbar__mobile-link--active {
-  color: var(--azure) !important;
-  background: var(--azure-lt) !important;
-  font-weight: 700;
-}
-.navbar__mobile-link--open { color: var(--azure); background: var(--azure-bg); }
-.navbar__mobile-link--trigger .navbar__chevron { margin-left: auto; }
-
-/* Sous-menu accordéon */
-.navbar__mobile-sub {
-  list-style: none;
-  padding: 0;
-  margin: 2px 0 2px 38px;
-  max-height: 0;
-  overflow: hidden;
-  border-left: 2.5px solid var(--azure-lt);
-  transition: max-height .3s var(--ease), border-color .3s;
-}
-.navbar__mobile-sub--open {
-  max-height: 400px;
-  border-left-color: var(--azure);
+  gap: 0.1rem;
+  height: 100%;
 }
 
-.navbar__mobile-sublink {
-  display: block;
-  padding: 9px 14px 9px 14px;
-  font-size: .86rem;
+.nav-links > li {
+  position: relative;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+/* ── Nav item (chaque bouton de menu) ───────────────────── */
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.4rem 0.7rem;
+  font-size: 0.8rem;
   font-weight: 500;
-  color: var(--muted);
-  text-decoration: none;
-  border-radius: 0 var(--r) var(--r) 0;
-  transition: background .18s, color .18s, padding-left .18s var(--ease);
+  color: #2c3e6b;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.2s, color 0.2s;
+  user-select: none;
 }
-.navbar__mobile-sublink:hover { background: var(--azure-bg); color: var(--azure); padding-left: 18px; }
-.navbar__mobile-sublink--active { color: var(--azure); background: var(--azure-lt); }
 
-/* ================================================================
-   RESPONSIVE — mobile first
-   ================================================================ */
+.nav-item i:not(.arrow) {
+  font-size: 0.85rem;
+  color: #0078ff;
+}
 
-/* ≥ 901px → desktop : on cache menu mobile ET l'overlay */
-@media (min-width: 901px) {
-  .navbar__mobile-menu,
-  .navbar__overlay {
-    display: none !important;  /* Jamais visible sur grand écran */
+.nav-item .arrow {
+  font-size: 0.6rem;
+  color: #90a8c8;
+  margin-left: 2px;
+  transition: transform 0.25s ease;
+}
+
+.nav-links > li:hover .nav-item {
+  background: #e8f3ff;
+  color: #0062ff;
+}
+
+.nav-links > li:hover .nav-item .arrow {
+  transform: rotate(180deg);
+}
+
+/* Active state (ex: Dashboard) */
+.nav-item.active {
+  background: linear-gradient(135deg, #0062ff, #00b4ff);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(0, 98, 255, 0.3);
+}
+.nav-item.active i {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+/* ── Dropdown ───────────────────────────────────────────── */
+.dropdown {
+  display: block;
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) translateY(8px);
+  background: #ffffff;
+  list-style: none;
+  min-width: 220px;
+  border-radius: 14px;
+  border: 1px solid #ddeeff;
+  box-shadow: 0 12px 40px rgba(0, 100, 255, 0.12);
+  padding: 0.5rem;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  z-index: 100;
+}
+
+/* Petite flèche décorative au-dessus du dropdown */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background: #ffffff;
+  border-left: 1px solid #ddeeff;
+  border-top: 1px solid #ddeeff;
+  transform: translateX(-50%) rotate(45deg);
+}
+
+.nav-links > li:hover .dropdown {
+  opacity: 1;
+  pointer-events: all;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dropdown li {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.55rem 0.9rem;
+  font-size: 0.82rem;
+  font-weight: 500;
+  color: #3a4a6b;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+}
+
+.dropdown li i {
+  font-size: 0.8rem;
+  color: #0078ff;
+  width: 16px;
+  text-align: center;
+}
+
+.dropdown li:hover {
+  background: #e8f3ff;
+  color: #0062ff;
+}
+
+/* ── Responsive ─────────────────────────────────────────── */
+@media (max-width: 960px) {
+  .hamburger { display: flex; }
+
+  .nav-links {
+    position: absolute;
+    top: 62px;
+    left: 0;
+    width: 100%;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: #ffffff;
+    border-top: 1px solid #ddeeff;
+    box-shadow: 0 16px 40px rgba(0, 100, 255, 0.1);
+    padding: 0.75rem 1rem 1.25rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transition: max-height 0.4s ease, opacity 0.3s ease;
+    height: auto;
   }
-}
 
-/* ≤ 900px → on cache le nav desktop et le profil, on montre le hamburger */
-@media (max-width: 900px) {
-  .navbar { padding: 0 16px; }
-  .navbar__nav          { display: none; }
-  .navbar__profile-wrap { display: none; }
-  .navbar__hamburger    { display: flex; } /* ← hamburger visible */
-  /* Le menu mobile est toujours dans le DOM, géré par visibility */
-}
+  #menu-toggle:checked + .hamburger + .nav-links {
+    max-height: 700px;
+    opacity: 1;
+  }
 
-/* ≤ 480px — très petit écran */
-@media (max-width: 480px) {
-  .navbar { padding: 0 12px; }
-  .navbar__brand-name { display: none; }   /* on garde juste l'icône */
+  .nav-links > li {
+    height: auto;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .nav-item {
+    width: 100%;
+    font-size: 0.9rem;
+    padding: 0.65rem 0.75rem;
+  }
+
+  /* Dropdown mobile statique */
+  .dropdown {
+    position: static;
+    opacity: 1;
+    pointer-events: all;
+    transform: none;
+    box-shadow: none;
+    border: none;
+    border-left: 2px solid #c8e0ff;
+    border-radius: 0;
+    background: transparent;
+    margin: 0.1rem 0 0.25rem 1.5rem;
+    padding: 0.25rem 0;
+    min-width: unset;
+    width: 100%;
+  }
+  .dropdown::before { display: none; }
+
+  .dropdown li {
+    font-size: 0.82rem;
+    color: #6b80a8;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+  }
+
+  .nav-links > li:hover .dropdown {
+    transform: none;
+  }
 }
