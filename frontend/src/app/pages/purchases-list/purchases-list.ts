@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { PurchaseService } from '../../services/purchase/purchase';
+import { PurchaseService } from './../../services/purchase/purchase';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
@@ -14,11 +14,17 @@ export class PurchasesList {
   purchases: any[] = [];
   loading = false;
 
-  constructor(private purchaseService: PurchaseService) {}
+  constructor(
+  private purchaseService: PurchaseService,
+  private cdr: ChangeDetectorRef,
+) {}
 
   ngOnInit(): void {
     if (this.shopId) {
       this.loadPurchases();
+    this.purchaseService.refreshNeeded$.subscribe(() => {
+    this.loadPurchases(); // 🔥 recharge la liste
+  });
     }
   }
 
@@ -30,6 +36,7 @@ export class PurchasesList {
           this.purchases = data;
           console.log('data', this.purchases);
           this.loading = false;
+           this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
