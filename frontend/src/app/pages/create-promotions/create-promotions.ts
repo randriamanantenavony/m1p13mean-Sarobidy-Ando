@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { PromotionService } from '../../services/promotions/promotion';
 import { ProductService } from '../../services/products/product';
@@ -23,37 +23,65 @@ export class PromotionFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private promoService: PromotionService,
-    private productService: ProductService
+    private productService: ProductService,
+    private cdr: ChangeDetectorRef
   ) {}
 
 
-ngOnInit(): void {
-   const storedShopId = localStorage.getItem('shopId');
-    if (!storedShopId) {
-      console.error('Aucun shopId trouvé, redirection vers login');
-      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
-      return;
-    }
+// ngOnInit(): void {
+//    const storedShopId = localStorage.getItem('shopId');
+//     if (!storedShopId) {
+//       console.error('Aucun shopId trouvé, redirection vers login');
+//       // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+//       return;
+//     }
 
-    this.shopId = storedShopId;  
-  // Charger les produits avant de créer le formulaire
+//     this.shopId = storedShopId;
+//   // Charger les produits avant de créer le formulaire
+//   this.productService.getProductsByShop(this.shopId).subscribe(products => {
+//     this.products = products || [];
+
+//     // Maintenant que les produits sont chargés, créer le formulaire
+//     this.promotionForm = this.fb.group({
+//       productId: ['', Validators.required],
+//       title: ['', [Validators.required, Validators.maxLength(100)]],
+//       description: [''],
+//       discountPercent: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
+//       startDate: ['', Validators.required],
+//       endDate: ['', Validators.required],
+//       shopId: [this.shopId, Validators.required]
+//     });
+
+//     this.loadPromotions();
+//   });
+// }
+ngOnInit(): void {
+  const storedShopId = localStorage.getItem('shopId');
+  if (!storedShopId) {
+    console.error('Aucun shopId trouvé, redirection vers login');
+    return;
+  }
+
+  this.shopId = storedShopId;
+
+  // ✅ Créer le formulaire tout de suite
+  this.promotionForm = this.fb.group({
+    productId: ['', Validators.required],
+    title: ['', [Validators.required, Validators.maxLength(100)]],
+    description: [''],
+    discountPercent: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
+    startDate: ['', Validators.required],
+    endDate: ['', Validators.required],
+    shopId: [this.shopId, Validators.required]
+  });
+
+  // Charger les produits ensuite
   this.productService.getProductsByShop(this.shopId).subscribe(products => {
     this.products = products || [];
-
-    // Maintenant que les produits sont chargés, créer le formulaire
-    this.promotionForm = this.fb.group({
-      productId: ['', Validators.required],
-      title: ['', [Validators.required, Validators.maxLength(100)]],
-      description: [''],
-      discountPercent: [0, [Validators.required, Validators.min(1), Validators.max(100)]],
-      startDate: ['', Validators.required],
-      endDate: ['', Validators.required],
-      shopId: [this.shopId, Validators.required]
-    });
-
     this.loadPromotions();
   });
 }
+
 
   loadProducts() {
     this.productService.getProductsByShop(this.shopId)
@@ -108,6 +136,7 @@ loadPromotions() {
       next: (data) => this.promotions = data, // ⚡ Remplace complètement le tableau
       error: (err) => console.error('Erreur récupération promotions', err)
     });
+    this.cdr.detectChanges();
 }
 
 }

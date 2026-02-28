@@ -58,10 +58,13 @@ export class PurchaseFormComponent implements OnInit {
 
   }
 
-  loadSuppliers() {
-    this.supplierService.getSuppliers()
-      .subscribe(data => this.suppliers = data);
-  }
+loadSuppliers() {
+  this.supplierService.getSuppliers()
+    .subscribe(data => {
+      this.suppliers = data;
+      this.cdr.detectChanges(); // Force Angular à vérifier à nouveau
+    });
+}
 
   loadProducts() {
     this.productService.getProductsByShop(this.shopId)
