@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { PromotionService } from '../../services/promotions/promotion';
 import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
@@ -9,17 +9,18 @@ import { CommonModule } from '@angular/common';
   templateUrl: './list-promotions.html',
   styleUrl: './list-promotions.css',
 })
-export class ListPromotions implements OnInit {
+export class ListPromotions implements OnChanges {
 
   @Input() promotions: any[] = [];
   loading = true;
-  shopId = '698b04d85bfcbccb80e5e06a'; 
+  shopId = '698b04d85bfcbccb80e5e06a';
 
-  constructor(private promoService: PromotionService) {}
+  constructor(private promoService: PromotionService, private cdr: ChangeDetectorRef) {}
 
-  ngOnInit(): void {
-    console.log('Coucou');
-    this.loadPromotions();
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['promotions']) {
+      this.loading = false;
+    }
   }
 
   loadPromotions() {
@@ -35,6 +36,7 @@ export class ListPromotions implements OnInit {
         next: res => {
           this.promotions = res;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: err => {
           console.error(err);

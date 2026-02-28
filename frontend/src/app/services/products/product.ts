@@ -1,7 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product, ProductCreate } from '../../models/product';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -26,6 +26,14 @@ export class ProductService {
 
   createProduct(data: ProductCreate) {
   return this.http.post<Product>(`${this.apiUrl}/`, data);
+}
+
+
+private refreshNeeded = new Subject<void>();
+refreshNeeded$ = this.refreshNeeded.asObservable();
+
+notifyRefresh() {
+  this.refreshNeeded.next();
 }
 
 
