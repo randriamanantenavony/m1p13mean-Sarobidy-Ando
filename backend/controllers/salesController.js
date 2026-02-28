@@ -120,6 +120,7 @@ exports.getSalesByShop = async (req, res) => {
   try {
     const { shopId } = req.params;
     const sales = await Sale.find({ shopId })
+      .sort({ date : -1 })
       .populate('customerId', 'name email phone')
       .populate('products.productId', 'name');
     res.status(200).json(sales);

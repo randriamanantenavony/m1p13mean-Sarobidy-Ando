@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { SalesService } from '../../services/sales/sales';
@@ -15,10 +15,13 @@ export class SalesListComponent implements OnInit {
   loading = true;
   shopId = '698b04d85bfcbccb80e5e06a'; // id de la boutique actuelle
 
-  constructor(private salesService: SalesService) {}
+  constructor(private salesService: SalesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadSales();
+     this.salesService.refreshNeeded$.subscribe(() => {
+    this.loadSales(); // 🔥 recharge la liste
+  });
   }
 
   loadSales() {
@@ -31,6 +34,7 @@ export class SalesListComponent implements OnInit {
         next: data => {
           this.sales = data;
           this.loading = false;
+          this.cdr.detectChanges();
         },
         error: err => {
           console.error('Erreur récupération ventes:', err);

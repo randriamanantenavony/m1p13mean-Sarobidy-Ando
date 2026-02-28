@@ -1,3 +1,4 @@
+<app-shop-navbar></app-shop-navbar>
 <form [formGroup]="saleForm" (ngSubmit)="onSubmit()">
 
   <!-- Client -->
@@ -25,19 +26,18 @@
       <option *ngFor="let product of products" [value]="product._id">{{ product.name }}</option>
     </select>
 
-    <label>Quantité</label>
     <input type="number" formControlName="quantity" min="1">
 
-    <button type="button" (click)="removeProduct(i)" [disabled]="productsArray.length === 1">Supprimer</button>
+    <button type="button" (click)="removeProduct(i)" [disabled]="productsArray.length === 1" class="remove-btn">Supprimer</button>
   </div>
 </div>
 
-  <button type="button" (click)="addProduct()">Ajouter un produit</button>
-
-  <button type="submit" [disabled]="saleForm.invalid || loading">
+  <button type="button" (click)="addProduct()" class="add-product-btn">Ajouter un produit</button>
+ <br>
+  <button type="submit" [disabled]="saleForm.invalid || loading" class="submit-btn">
     {{ loading ? 'Enregistrement...' : 'Enregistrer la vente' }}
   </button>
 </form>
 
-
+<br><br>
 <app-liste-ventes></app-liste-ventes>
