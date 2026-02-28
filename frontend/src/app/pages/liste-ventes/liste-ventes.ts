@@ -13,11 +13,18 @@ export class SalesListComponent implements OnInit {
 
   sales: any[] = [];
   loading = true;
-  shopId = '698b04d85bfcbccb80e5e06a'; // id de la boutique actuelle
+  shopId = ''; // id de la boutique actuelle
 
   constructor(private salesService: SalesService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     this.loadSales();
      this.salesService.refreshNeeded$.subscribe(() => {
     this.loadSales(); // 🔥 recharge la liste

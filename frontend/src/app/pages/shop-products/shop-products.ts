@@ -24,11 +24,20 @@ export class ShopProducts {
   constructor(private productService: ProductService, private cdr: ChangeDetectorRef){}
 
   ngOnInit(){
-    this.shopId = '698b04d85bfcbccb80e5e06a';
+    this.shopId = '';
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+      return;
+    }
+
+    this.shopId = storedShopId;  
     this.loadProducts();
   }
 
   loadProducts() {
+
     this.loading = true;
 
     this.productService.getProductsByShop(this.shopId).subscribe({

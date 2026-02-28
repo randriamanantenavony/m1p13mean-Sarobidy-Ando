@@ -15,11 +15,19 @@ export class ListOrdersComponent implements OnInit {
 
   orders: any[] = [];
   loading = false;
-  shopId = '698b04d85bfcbccb80e5e06a';
+  shopId = '';
 
   constructor(private orderService: OrderService, private cdr : ChangeDetectorRef) {}
 
   ngOnInit(): void {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+      return;
+    }
+
+    this.shopId = storedShopId;
     this.loadOrders();
   }
 

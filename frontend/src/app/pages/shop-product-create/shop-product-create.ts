@@ -30,7 +30,7 @@ export class ShopProductCreate {
   categoryId = ''; // ID statique pour l’instant
   imageUrl = '';
 
-  shopId = '698b04d85bfcbccb80e5e06a'; // boutique statique
+  shopId = ''; // boutique statique
 
   loading = false;
 
@@ -39,6 +39,13 @@ export class ShopProductCreate {
   constructor(private productService: ProductService, private categoriesService : CategoriesService) {}
 
   ngOnInit(){
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     this.loadCategories();
   }
 

@@ -17,7 +17,7 @@ export class PromotionFormComponent implements OnInit {
   promotionForm!: FormGroup;
   loading = false;
   products: any[] = [];
-  shopId = '698b04d85bfcbccb80e5e06a';
+  shopId = '';
   promotions: any[] = [];
 
   constructor(
@@ -28,6 +28,14 @@ export class PromotionFormComponent implements OnInit {
 
 
 ngOnInit(): void {
+   const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+      return;
+    }
+
+    this.shopId = storedShopId;  
   // Charger les produits avant de créer le formulaire
   this.productService.getProductsByShop(this.shopId).subscribe(products => {
     this.products = products || [];

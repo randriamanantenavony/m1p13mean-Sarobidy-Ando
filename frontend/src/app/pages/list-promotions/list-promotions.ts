@@ -13,11 +13,18 @@ export class ListPromotions implements OnChanges {
 
   @Input() promotions: any[] = [];
   loading = true;
-  shopId = '698b04d85bfcbccb80e5e06a';
+  shopId = '';
 
   constructor(private promoService: PromotionService, private cdr: ChangeDetectorRef) {}
 
   ngOnChanges(changes: SimpleChanges) {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     if (changes['promotions']) {
       this.loading = false;
     }

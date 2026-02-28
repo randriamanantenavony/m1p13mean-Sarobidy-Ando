@@ -22,7 +22,7 @@ export class PurchaseFormComponent implements OnInit {
   loading = false;
   suppliers: any[] = [];
   products: any[] = [];
-  shopId = '698b04d85bfcbccb80e5e06a';
+  shopId = '';
 
   showConfirmModal = false;  // Pour afficher la modal de confirmation
   showSuccess = false;       // Pour afficher le message de succès
@@ -36,6 +36,13 @@ export class PurchaseFormComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     this.purchaseForm = this.fb.group({
       shopId: [this.shopId || '', Validators.required],
       supplierId: ['', Validators.required],
