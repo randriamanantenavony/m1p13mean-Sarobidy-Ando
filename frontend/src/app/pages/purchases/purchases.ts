@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -6,11 +6,12 @@ import { PurchaseService } from '../../services/purchase/purchase';
 import { SupplierService } from '../../services/purchase/supplier';
 import { ProductService } from '../../services/products/product';
 import { PurchasesList } from "../purchases-list/purchases-list";
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-purchases',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PurchasesList],
+  imports: [CommonModule, ReactiveFormsModule, PurchasesList, ShopNavbarComponent],
   templateUrl: './purchases.html',
   styleUrls: ['./purchases.css'],
 })
@@ -22,7 +23,6 @@ export class PurchaseFormComponent implements OnInit {
   products: any[] = [];
   shopId = '698b04d85bfcbccb80e5e06a';
 
-  // 👇 Propriétés pour la modal et le message de succès
   showConfirmModal = false;  // Pour afficher la modal de confirmation
   showSuccess = false;       // Pour afficher le message de succès
 
@@ -30,7 +30,8 @@ export class PurchaseFormComponent implements OnInit {
     private fb: FormBuilder,
     private purchaseService: PurchaseService,
     private productService: ProductService,
-    private supplierService: SupplierService
+    private supplierService: SupplierService,
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -40,11 +41,13 @@ export class PurchaseFormComponent implements OnInit {
       productId: ['', Validators.required],
       quantity: [1, [Validators.required, Validators.min(1)]],
       purchasePrice: [0, [Validators.required, Validators.min(0)]],
-      date: [new Date().toISOString().split('T')[0], Validators.required] // Format YYYY-MM-DD pour input date
+      date: [new Date().toISOString().split('T')[0], Validators.required]
     });
 
     this.loadSuppliers();
     this.loadProducts();
+    this.cdr.detectChanges();
+
   }
 
   loadSuppliers() {

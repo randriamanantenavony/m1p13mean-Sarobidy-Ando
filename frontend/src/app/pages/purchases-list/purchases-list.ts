@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { PurchaseService } from '../../services/purchase/purchase';
 import { CommonModule, NgIf } from '@angular/common';
 
@@ -14,7 +14,7 @@ export class PurchasesList {
   purchases: any[] = [];
   loading = false;
 
-  constructor(private purchaseService: PurchaseService) {}
+  constructor(private purchaseService: PurchaseService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     if (this.shopId) {
@@ -30,6 +30,7 @@ export class PurchasesList {
           this.purchases = data;
           console.log('data', this.purchases);
           this.loading = false;
+           this.cdr.detectChanges();
         },
         error: (err) => {
           console.error(err);
