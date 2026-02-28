@@ -5,10 +5,11 @@ import { ChangeDetectorRef } from '@angular/core';
 import { DOCUMENT } from '@angular/common';
 import { ShopService } from '../../services/shop';
 import { ListPromotions } from '../list-promotions/list-promotions';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-promotions',
-  imports: [CommonModule, NgIf, NgForOf, ListPromotions],
+  imports: [CommonModule, NgIf, NgForOf, ListPromotions, ShopNavbarComponent],
   templateUrl: './promotions.html',
   styleUrl: './promotions.css',
 })
@@ -30,6 +31,11 @@ export class PromotionComponents implements OnInit , OnDestroy {
     this.document.body.appendChild(this.ElementRef.nativeElement); // Assure que le composant est au-dessus du plan du centre commercial
     this.document.body.style.overflow = 'hidden'; // Empêche le scroll du fond
     this.loadPromotions();
+    this.promotionService.refreshNeeded$.subscribe(() => {
+    this.loadPromotions();
+    this.cdr.detectChanges();
+
+  });
   }
 
   ngOnDestroy(): void {

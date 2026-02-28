@@ -4,10 +4,11 @@ import { PromotionService } from '../../services/promotions/promotion';
 import { ProductService } from '../../services/products/product';
 import { CommonModule } from '@angular/common';
 import { ListPromotions } from '../list-promotions/list-promotions';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-create-promotions',
-  imports: [CommonModule,ReactiveFormsModule, ListPromotions],
+  imports: [CommonModule,ReactiveFormsModule, ListPromotions, ShopNavbarComponent],
   templateUrl: './create-promotions.html',
   styleUrl: './create-promotions.css',
 })
@@ -25,7 +26,13 @@ export class PromotionFormComponent implements OnInit {
     private productService: ProductService
   ) {}
 
-  ngOnInit(): void {
+
+ngOnInit(): void {
+  // Charger les produits avant de créer le formulaire
+  this.productService.getProductsByShop(this.shopId).subscribe(products => {
+    this.products = products || [];
+
+    // Maintenant que les produits sont chargés, créer le formulaire
     this.promotionForm = this.fb.group({
       productId: ['', Validators.required],
       title: ['', [Validators.required, Validators.maxLength(100)]],
@@ -36,9 +43,9 @@ export class PromotionFormComponent implements OnInit {
       shopId: [this.shopId, Validators.required]
     });
 
-    this.loadProducts();
     this.loadPromotions();
-  }
+  });
+}
 
   loadProducts() {
     this.productService.getProductsByShop(this.shopId)
@@ -61,34 +68,36 @@ showConfirmModal() {
   }
 
 
-  onSubmit() {
-    if (this.promotionForm.invalid) return;
-    const { startDate, endDate } = this.promotionForm.value;
-    if (new Date(startDate) > new Date(endDate)) {
-      alert('La date de début ne peut pas être après la date de fin !');
-      return;
-    }
-    this.loading = true;
-    this.promoService.createPromotion(this.promotionForm.value)
-      .subscribe({
-        next: res => {
-          alert('Promotion enregistrée avec succès !');
-          this.promotionForm.reset({ shopId: this.shopId, discountPercent: 0 });
-          this.loadPromotions(),
-          this.loading = false;
-        },
-        error: err => {
-          console.error(err);
-          alert('Erreur lors de l’enregistrement de la promotion.');
-          this.loading = false;
-        }
-      });
+onSubmit() {
+  if (this.promotionForm.invalid) return;
+  const { startDate, endDate } = this.promotionForm.value;
+  if (new Date(startDate) > new Date(endDate)) {
+    alert('La date de début ne peut pas être après la date de fin !');
+    return;
   }
 
-  loadPromotions() {
+  this.loading = true;
+
+  this.promoService.createPromotion(this.promotionForm.value)
+    .subscribe({
+      next: res => {
+        alert('Promotion enregistrée avec succès !');
+        this.promotionForm.reset({ shopId: this.shopId, discountPercent: 0 });
+        this.promoService.notifyRefresh();
+        this.loading = false;
+      },
+      error: err => {
+        console.error(err);
+        alert('Erreur lors de l’enregistrement de la promotion.');
+        this.loading = false;
+      }
+    });
+}
+
+loadPromotions() {
   this.promoService.getPromotionsByShop(this.shopId)
     .subscribe({
-      next: (data) => this.promotions = data,
+      next: (data) => this.promotions = data, // ⚡ Remplace complètement le tableau
       error: (err) => console.error('Erreur récupération promotions', err)
     });
 }
