@@ -35,7 +35,6 @@ export class DashboardBoutique {
   }
 
   loadDashboard() {
-    console.log('this is my data');
     this.dashboardService.getKPIs(this.shopId).subscribe({
       next: (data) => {
         this.caDuJour = data.caDuJour;
@@ -46,7 +45,6 @@ export class DashboardBoutique {
         this.stockParCategorie = data.stockParCategorie;
         this.topArticles = data.topArticles;
         this.topClients = data.topClients;
-        console.log('data :', data);
         this.cdr.detectChanges();
       },
       error: (err) => console.error('Erreur récupération KPI:', err)

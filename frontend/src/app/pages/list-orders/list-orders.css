@@ -431,3 +431,24 @@ td.col-amount {
 .btn-primary:hover {
   background-color: #0056b3; /* bleu plus foncé au survol */
 }
+
+
+.btn-delivery {
+  background: linear-gradient(90deg, #ff9800, #f57c00); /* orange dynamique */
+  color: white;
+  font-size: 12px;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: transform 0.2s ease, background-color 0.3s ease;
+}
+
+.btn-delivery:hover {
+  background: linear-gradient(90deg, #f57c00, #e65100);
+  transform: scale(1.05); /* petit effet zoom au survol */
+}
