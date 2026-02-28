@@ -1,5 +1,5 @@
+import { PurchaseService } from './../../services/purchase/purchase';
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
-import { PurchaseService } from '../../services/purchase/purchase';
 import { CommonModule, NgIf } from '@angular/common';
 
 @Component({
@@ -14,11 +14,17 @@ export class PurchasesList {
   purchases: any[] = [];
   loading = false;
 
-  constructor(private purchaseService: PurchaseService, private cdr: ChangeDetectorRef) {}
+  constructor(
+  private purchaseService: PurchaseService,
+  private cdr: ChangeDetectorRef,
+) {}
 
   ngOnInit(): void {
     if (this.shopId) {
       this.loadPurchases();
+    this.purchaseService.refreshNeeded$.subscribe(() => {
+    this.loadPurchases(); // 🔥 recharge la liste
+  });
     }
   }
 

@@ -7,6 +7,7 @@ import { SupplierService } from '../../services/purchase/supplier';
 import { ProductService } from '../../services/products/product';
 import { PurchasesList } from "../purchases-list/purchases-list";
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-purchases',
@@ -101,6 +102,7 @@ export class PurchaseFormComponent implements OnInit {
             purchasePrice: 0,
             date: new Date().toISOString().split('T')[0]
           });
+          this.purchaseService.notifyRefresh();
 
           // Masquer le message de succès après 3 secondes
           setTimeout(() => {
@@ -134,4 +136,6 @@ export class PurchaseFormComponent implements OnInit {
     const product = this.products.find(p => p._id === id);
     return product ? product.name : '';
   }
+
+
 }

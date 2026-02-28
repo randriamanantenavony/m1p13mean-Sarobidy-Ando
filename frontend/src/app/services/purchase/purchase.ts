@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Purchase } from '../../models/purchase';
 
 @Injectable({
@@ -20,5 +20,11 @@ export class PurchaseService {
   return this.http.get<any[]>(`${this.apiUrl}/shop/${shopId}`);
 }
 
+ private refreshNeeded = new Subject<void>();
+  refreshNeeded$ = this.refreshNeeded.asObservable();
+
+  notifyRefresh() {
+    this.refreshNeeded.next();
+  }
 
 }
