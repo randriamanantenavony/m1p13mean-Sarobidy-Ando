@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { DashboardService } from '../../services/dashboard/dashboard';
 import { CommonModule, NgIf } from '@angular/common';
 import { formatDate } from '@angular/common';
@@ -28,7 +28,7 @@ export class DashboardBoutique {
 
   today: string = formatDate(new Date(), 'dd/MM/yyyy', 'fr');
 
-  constructor(private dashboardService: DashboardService) { }
+  constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
     this.loadDashboard();
@@ -47,6 +47,7 @@ export class DashboardBoutique {
         this.topArticles = data.topArticles;
         this.topClients = data.topClients;
         console.log('data :', data);
+        this.cdr.detectChanges();
       },
       error: (err) => console.error('Erreur récupération KPI:', err)
     });
