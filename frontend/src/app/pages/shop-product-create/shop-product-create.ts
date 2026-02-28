@@ -4,6 +4,7 @@ import { ProductService } from './../../services/products/product';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductCreate } from '../../models/product';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 
 interface Category {
@@ -14,7 +15,7 @@ interface Category {
 
 @Component({
   selector: 'app-shop-product-create',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, ShopNavbarComponent],
   templateUrl: './shop-product-create.html',
   styleUrls: ['./shop-product-create.css'],
 })
