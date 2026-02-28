@@ -49,6 +49,7 @@ exports.getOrdersByShop = async (req, res) => {
   try {
     const { shopId } = req.params;
     const orders = await Order.find({ shopId })
+                              .sort({ date : -1})
                               .populate('customerId', 'name email phone')
                               .populate('products.productId', 'name price');
     res.status(200).json(orders);

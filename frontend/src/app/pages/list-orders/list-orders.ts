@@ -3,11 +3,12 @@ import { NgFor, NgIf } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/orders/orders';
 import { CommonModule } from '@angular/common';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-list-orders',
   templateUrl: './list-orders.html',
-  imports: [CommonModule, NgIf ,NgFor],
+  imports: [CommonModule, NgIf ,NgFor, ShopNavbarComponent],
   styleUrls: ['./list-orders.css'],
 })
 export class ListOrdersComponent implements OnInit {

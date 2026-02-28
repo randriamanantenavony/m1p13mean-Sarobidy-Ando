@@ -1,4 +1,5 @@
-<!-- pages/orders/list-orders.html -->
+<app-shop-navbar></app-shop-navbar>
+
 <h3>Commandes de la boutique</h3>
 
 <table *ngIf="!loading; else loadingTpl">
@@ -18,29 +19,51 @@
     <tr *ngFor="let order of orders">
       <td>{{ order.customerId?.name || 'Anonyme' }} <br>{{ order.customerId?.email || 'Anonyme' }} <br>{{ order.customerId?.phone || 'Anonyme' }}</td>
       <td>
-        <ul>
-          <li *ngFor="let p of order.products">
-            {{ p.productId.name }} - {{ p.quantity }}
-          </li>
-        </ul>
+       <ul>
+        <li *ngFor="let p of order.products">
+          <strong>{{ p.productId.name }}</strong> :
+          <strong>{{ p.quantity }}</strong>
+        </li>
+      </ul>
       </td>
       <td>{{ order.totalQuantity }}</td>
       <td>{{ order.totalAmount }}</td>
-      <td>{{ order.status }}</td>
-       <td>{{ order.paymentStatus }}</td>
-       <td>{{ order.deliveryStatus }}</td>
+     <td>
+          <span [ngClass]="'status-' + order.status">
+            {{ order.status }}
+          </span>
+        </td>
         <td>
-        <button *ngIf="order.status === 'pending'" (click)="validateOrder(order._id)">
-          Valider
-        </button>
+          <span [ngClass]="'payment-' + order.paymentStatus">
+            {{ order.paymentStatus }}
+          </span>
+        </td>
+        <td>
+          <span [ngClass]="'delivery-' + order.deliveryStatus">
+            {{ order.deliveryStatus }}
+          </span>
+        </td>
+
+        <td>
+       <button
+        *ngIf="order.status === 'pending'"
+        (click)="validateOrder(order._id)"
+        class="btn btn-success">
+        ✅ Valider
+      </button>
+
+
       </td>
 
       <td>
-        <button
-    *ngIf="order.status === 'validated' && order.paymentStatus !== 'paid'"
-    (click)="markAsPaid(order._id)">
-    Marquer comme payé
-  </button></td>
+    <button
+      *ngIf="order.status === 'validated' && order.paymentStatus !== 'paid'"
+      (click)="markAsPaid(order._id)"
+      class="btn btn-success">
+      ✅ Marquer comme payé
+    </button>
+
+</td>
 <td>
   <span *ngIf="order.paymentStatus === 'paid'" class="paid-badge">
     ✔ Payé
