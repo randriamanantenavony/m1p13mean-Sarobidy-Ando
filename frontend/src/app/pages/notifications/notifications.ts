@@ -1,11 +1,12 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { NotificationsServices } from '../../services/notif/notifications-services';
 import { NotificationModel } from '../../models/notification';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-notifications',
-  imports: [CommonModule, NgIf, NgFor],
+  imports: [CommonModule, NgIf, NgFor, ShopNavbarComponent],
   templateUrl: './notifications.html',
   styleUrl: './notifications.css',
 })
@@ -13,7 +14,7 @@ export class Notifications implements OnInit{
   notifications: NotificationModel[] = [];
   shopId = '698b04d85bfcbccb80e5e06a'; // récupérer depuis auth ou route
 
-  constructor(private notificationService: NotificationsServices) {}
+  constructor(private notificationService: NotificationsServices, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadNotifications();
@@ -24,6 +25,8 @@ export class Notifications implements OnInit{
       .getShopNotifications(this.shopId)
       .subscribe(data => {
         this.notifications = data;
+        console.log('data :' , data);
+        this.cdr.detectChanges();
       });
   }
 
