@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -30,4 +30,11 @@ markAsDelivered(orderId: string) {
   return this.http.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {});
 }
 
+ private refreshNeeded = new Subject<void>();
+  refreshNeeded$ = this.refreshNeeded.asObservable();
+
+  notifyRefresh() {
+    this.refreshNeeded.next();
+  }
+  
 }

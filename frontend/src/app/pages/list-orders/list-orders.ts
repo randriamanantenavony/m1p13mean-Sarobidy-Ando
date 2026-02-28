@@ -1,13 +1,14 @@
 import { NgFor, NgIf } from '@angular/common';
 // pages/orders/list-orders.component.ts
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/orders/orders';
 import { CommonModule } from '@angular/common';
+import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 
 @Component({
   selector: 'app-list-orders',
   templateUrl: './list-orders.html',
-  imports: [CommonModule, NgIf ,NgFor],
+  imports: [CommonModule, NgIf ,NgFor, ShopNavbarComponent],
   styleUrls: ['./list-orders.css'],
 })
 export class ListOrdersComponent implements OnInit {
@@ -16,59 +17,66 @@ export class ListOrdersComponent implements OnInit {
   loading = false;
   shopId = '698b04d85bfcbccb80e5e06a';
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private cdr : ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.loadOrders();
   }
 
-  loadOrders() {
-    this.loading = true;
-    this.orderService.getOrdersByShop(this.shopId)
-      .subscribe({
-        next: (data) => {
-          // calculer totalQuantity pour chaque commande
-          this.orders = data.map(order => ({
-            ...order,
-            totalQuantity: order.products.reduce((sum: number, p: any) => sum + p.quantity, 0)
-          }));
-          this.loading = false;
-        },
-        error: (err) => {
-          console.error('Erreur récupération commandes', err);
-          this.loading = false;
-        }
-      });
-  }
+loadOrders() {
+  this.loading = true;               // 🔹 on indique que ça charge
+  this.orders = [];                  // 🔹 on vide le tableau pour éviter les erreurs
 
-  validateOrder(orderId: string) {
-    if (!confirm('⚠️ Voulez-vous vraiment valider cette commande ?')) return;
-    this.orderService.validateOrder(orderId)
-      .subscribe({
-        next: () => {
-          alert('Commande validée ✅');
-          this.loadOrders(); // auto-refresh
-        },
-        error: (err) => {
-          console.error(err);
-          alert('Erreur lors de la validation');
-        }
-      });
-  }
+  this.orderService.getOrdersByShop(this.shopId)
+    .subscribe({
+      next: (data) => {
+        this.orders = data.map(order => ({
+          ...order,
+          totalQuantity: order.products.reduce((sum: number, p: any) => sum + p.quantity, 0)
+        }));
 
-  markAsPaid(orderId: string) {
+        this.loading = false;
+        this.cdr.detectChanges();
+      },
+      error: (err) => {
+        console.error('Erreur récupération commandes', err);
+        this.loading = false;       // 🔹 même en erreur, on quitte le "loading"
+      }
+    });
+}
 
-  const confirmed = confirm(
-    '⚠️ Cette action est irréversible.\n\nConfirmer le paiement ?'
-  );
 
+validateOrder(orderId: string) {
+  if (!confirm('⚠️ Voulez-vous vraiment valider cette commande ?')) return;
+
+  this.orderService.validateOrder(orderId)
+    .subscribe({
+      next: () => {
+        alert('Commande validée ✅');
+        this.cdr.detectChanges();
+
+        // 🔥 recharge les données depuis l'API
+        this.loadOrders();
+      },
+      error: (err) => {
+        console.error(err);
+        alert('Erreur lors de la validation');
+      }
+    });
+}
+
+markAsPaid(orderId: string) {
+  const confirmed = confirm('⚠️ Confirmer le paiement ?');
   if (!confirmed) return;
 
   this.orderService.markAsPaid(orderId)
     .subscribe({
       next: () => {
         alert('Paiement enregistré 💳');
-        this.loadOrders(); // refresh automatique
+        this.cdr.detectChanges();
+
+        // 🔥 Recharge les commandes
+        this.loadOrders();
       },
       error: (err) => {
         console.error(err);
@@ -78,17 +86,16 @@ export class ListOrdersComponent implements OnInit {
 }
 
 markAsDelivered(orderId: string) {
-  const confirmed = confirm(
-    '⚠️ Cette action est irréversible. Commencer la livraison ?'
-  );
-
+  const confirmed = confirm('⚠️ Commencer la livraison ?');
   if (!confirmed) return;
 
   this.orderService.markAsDelivered(orderId)
     .subscribe({
       next: () => {
         alert('Commande livrée ✅');
-        this.loadOrders(); // auto-refresh
+        this.cdr.detectChanges();
+        // 🔥 Recharge les commandes
+        this.loadOrders();
       },
       error: (err) => {
         console.error(err);
@@ -96,5 +103,4 @@ markAsDelivered(orderId: string) {
       }
     });
 }
-
 }
