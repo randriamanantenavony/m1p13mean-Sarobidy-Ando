@@ -16,7 +16,7 @@ registerLocaleData(localeFr);
 })
 export class DashboardBoutique {
 
-  shopId = '698b04d85bfcbccb80e5e06a'; // exemple : ID boutique
+  shopId! : string; // exemple : ID boutique
   caDuJour = 0;
   ventesDuJour = 0;
   commandesEnAttente = 0;
@@ -31,7 +31,15 @@ export class DashboardBoutique {
   constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void {
-    this.loadDashboard();
+    const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+      return;
+    }
+
+    this.shopId = storedShopId;
+      this.loadDashboard();
   }
 
   loadDashboard() {

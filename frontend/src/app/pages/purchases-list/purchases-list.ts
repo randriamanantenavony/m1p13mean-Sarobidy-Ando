@@ -10,7 +10,7 @@ import { CommonModule, NgIf } from '@angular/common';
 })
 export class PurchasesList {
 
- shopId = '698b04d85bfcbccb80e5e06a';
+ shopId = '';
   purchases: any[] = [];
   loading = false;
 
@@ -20,6 +20,13 @@ export class PurchasesList {
 ) {}
 
   ngOnInit(): void {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     if (this.shopId) {
       this.loadPurchases();
     this.purchaseService.refreshNeeded$.subscribe(() => {

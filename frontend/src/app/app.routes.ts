@@ -12,19 +12,22 @@ import { Notifications } from './pages/notifications/notifications';
 import { ShopNavbarComponent } from './pages/navbar-boutique/navbar-boutique';
 import { DashboardBoutique } from './pages/dashboard/dashboard';
 import { BoutiqueMain } from './pages/boutique-main/boutique-main';
+import { LoginBoutique } from './pages/login-boutique/login-boutique';
+import { AuthGuard } from './guards/guard';
 
 export const routes: Routes = [
     {path : 'shop-list', component : ShopList},
-    {path : 'products-boutiques', component : ShopProducts},
-    {path : 'create-products', component : ShopProductCreate},
-    {path : 'purchase', component : PurchaseFormComponent},
-    {path : 'sales', component : SaleFormComponent},
-    {path : 'promo', component :  PromotionFormComponent},
+    {path: 'login',component: LoginBoutique},
+    {path : 'products-boutiques', component : ShopProducts, canActivate: [AuthGuard]},
+    {path : 'create-products', component : ShopProductCreate, canActivate: [AuthGuard]},
+    {path : 'purchase', component : PurchaseFormComponent, canActivate: [AuthGuard]},
+    {path : 'sales', component : SaleFormComponent, canActivate: [AuthGuard]},
+    {path : 'promo', component :  PromotionFormComponent, canActivate: [AuthGuard]},
     {path : 'liste-promo', component : ListPromotions},
     {path : 'liste-notif', component : Notifications},
-    {path : 'liste-order', component : ListOrdersComponent},
-    {path : 'navbar', component : ShopNavbarComponent},
-    {path : 'dashboard', component : DashboardBoutique},
-    {path : 'boutique/main', component : BoutiqueMain},
-    {path :'', redirectTo: '/boutique/main', pathMatch : 'full'}
-];
+    {path : 'liste-order', component : ListOrdersComponent, canActivate: [AuthGuard]},
+    {path : 'navbar', component : ShopNavbarComponent, canActivate: [AuthGuard]},
+    {path : 'dashboard', component : DashboardBoutique, canActivate: [AuthGuard]},
+    {path : 'boutique/main', component : BoutiqueMain, canActivate: [AuthGuard]},
+    { path: '', redirectTo: 'login', pathMatch: 'full' }
+  ];

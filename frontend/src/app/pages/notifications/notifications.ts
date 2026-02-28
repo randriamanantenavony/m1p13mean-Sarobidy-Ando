@@ -12,11 +12,18 @@ import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 })
 export class Notifications implements OnInit{
   notifications: NotificationModel[] = [];
-  shopId = '698b04d85bfcbccb80e5e06a'; // récupérer depuis auth ou route
+  shopId = ''; // récupérer depuis auth ou route
 
   constructor(private notificationService: NotificationsServices, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
+     const storedShopId = localStorage.getItem('shopId');
+    if (!storedShopId) {
+      console.error('Aucun shopId trouvé, redirection vers login');
+      return;
+    }
+
+    this.shopId = storedShopId;
     this.loadNotifications();
   }
 

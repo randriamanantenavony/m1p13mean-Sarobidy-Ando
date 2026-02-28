@@ -3,6 +3,7 @@ const dotenv = require('dotenv');
 const connectDB = require('./config/db');
 const shopRoutes = require('./routes/shopRoutes');
 const cors = require('cors');
+const authMiddleware = require('./middleware/authMiddleware');
 require('./cron/promotion'); 
 
 
@@ -30,17 +31,18 @@ app.use('/api/shops', shopRoutes);
 app.use('/api/categories_products', require('./routes/categoryRoutes'));
 app.use('/api/products', require('./routes/productRoutes'));
 app.use('/api/suppliers', require('./routes/supplierRoutes'));
-app.use('/api/purchases', require('./routes/purchaseRoutes'));
-app.use('/api/customers', require('./routes/customerRoutes'));
-app.use('/api/sales', require('./routes/salesRoutes'));
+app.use('/api/purchases',authMiddleware, require('./routes/purchaseRoutes'));
+app.use('/api/customers',authMiddleware, require('./routes/customerRoutes'));
+app.use('/api/sales', authMiddleware,require('./routes/salesRoutes'));
 app.use('/api/orders', require('./routes/orderRoutes'));
 app.use('/api/notifications', require('./routes/notificationRoutes'));
 app.use('/api/orders/validate', require('./routes/validateOrderRoutes'));
 app.use('/api/promotions', require('./routes/promotionRoutes'));
 app.use('/api/cart', require('./routes/carteRoutes'));
-app.use('/api/delivery', require('./routes/deliveryRoutes'));
+app.use('/api/delivery',authMiddleware, require('./routes/deliveryRoutes'));
 app.use('/api/favorites', require('./routes/favoriteRoutes'));
-app.use('/api/dashboard', require('./routes/dashboardRoutes'));
+app.use('/api/dashboard',authMiddleware, require('./routes/dashboardRoutes'));
+app.use('/api/login', require('./routes/loginRoutes')); 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
