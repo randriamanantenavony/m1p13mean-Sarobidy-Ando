@@ -5,11 +5,12 @@ import { ProductService } from '../../services/products/product';
 import { Customers } from '../../services/customer/customers';
 import { SalesService } from '../../services/sales/sales';
 import { SalesListComponent } from "../liste-ventes/liste-ventes";
+import { ShopNavbarComponent } from "../navbar-boutique/navbar-boutique";
 
 
 @Component({
   selector: 'app-sales',
-  imports: [CommonModule, ReactiveFormsModule, SalesListComponent],
+  imports: [CommonModule, ReactiveFormsModule, SalesListComponent, ShopNavbarComponent],
   templateUrl: './sales.html',
   styleUrl: './sales.css',
 })
@@ -116,6 +117,7 @@ loadProducts() {
           this.productsArray.clear();
           this.productsArray.push(this.createProductGroup());
           this.loading = false;
+          this.saleService.notifyRefresh();
         },
         error: err => {
           console.error(err);
