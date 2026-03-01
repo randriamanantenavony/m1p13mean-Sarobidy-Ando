@@ -86,7 +86,7 @@ loadProducts() {
 }
 
   loadCustomers() {
-    this.customerService.getCustomersByShop(this.shopId)
+    this.customerService.getCustomersByShop()
       .subscribe(data => this.customers = data);
   }
 
@@ -127,9 +127,14 @@ loadProducts() {
           this.saleService.notifyRefresh();
         },
         error: err => {
-          console.error(err);
-          alert('Erreur lors de l’enregistrement');
           this.loading = false;
+
+      // ✅ Affiche le message précis du backend si disponible
+      const backendMessage = err.error?.message || 'Erreur lors de l’enregistrement';
+
+      // Option 1 : alert
+      alert(backendMessage);
+      console.error('Erreur création vente:', backendMessage);
         }
       });
   }

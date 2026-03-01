@@ -62,5 +62,5 @@ export class PromotionService {
   notifyRefresh() {
     this.refreshNeeded.next();
   }
-  
+
 }

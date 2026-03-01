@@ -4,6 +4,8 @@ import { CommonModule, NgIf } from '@angular/common';
 import { formatDate } from '@angular/common';
 import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
+import { Router } from '@angular/router';
+import { getAuthData } from '../../services/auth/auth.util';
 
 
 registerLocaleData(localeFr);
@@ -28,22 +30,19 @@ export class DashboardBoutique {
 
   today: string = formatDate(new Date(), 'dd/MM/yyyy', 'fr');
 
-  constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef) { }
+  constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef, private router: Router) { }
 
   ngOnInit(): void {
-    const storedShopId = localStorage.getItem('shopId');
-    if (!storedShopId) {
-      console.error('Aucun shopId trouvé, redirection vers login');
-      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+   const authData = getAuthData(this.router);
+    if (!authData) {
+      console.log('Données manquantes');
       return;
     }
-
-    this.shopId = storedShopId;
-      this.loadDashboard();
+    this.loadDashboard();
   }
 
   loadDashboard() {
-    this.dashboardService.getKPIs(this.shopId).subscribe({
+    this.dashboardService.getKPIs().subscribe({
       next: (data) => {
         this.caDuJour = data.caDuJour;
         this.ventesDuJour = data.ventesDuJour;

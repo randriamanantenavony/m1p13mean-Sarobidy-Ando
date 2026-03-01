@@ -2,6 +2,7 @@ const Product = require('../models/boutique/Products');
 const Order = require('../models/boutique/Order');
 const Customer = require('../models/boutique/Customer');
 const mongoose = require('mongoose');
+const Sales = require('../models/boutique/Sales');
 
 exports.getKPI = async (req, res) => {
   try {
@@ -9,20 +10,26 @@ exports.getKPI = async (req, res) => {
     if (!shopId) return res.status(400).json({ error: "shopId requis" });
 
     const shopObjectId = new mongoose.Types.ObjectId(shopId);
+      const today = new Date();
+      today.setUTCHours(0, 0, 0, 0);
 
-    // Dates du jour
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const tomorrow = new Date(today);
-    tomorrow.setDate(tomorrow.getDate() + 1);
+      const tomorrow = new Date(today);
+      tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
 
-    // 1️⃣ Commandes du jour pour calcul CA et ventes
-    const ordersToday = await Order.find({
-      shopId: shopObjectId,
-      createdAt: { $gte: today, $lt: tomorrow }
-    });
+      const allOrders = await Sales.find({ shopId: shopObjectId });
+      console.log(allOrders.map(o => o.createdAt));
 
-    const caDuJour = ordersToday.reduce((sum, order) => sum + order.totalAmount, 0);
+      const ordersToday = await Sales.find({
+        shopId: shopObjectId,
+        createdAt: { $gte: today, $lt: tomorrow }
+      });
+
+  const caDuJour = ordersToday.reduce((total, order) => {
+    return total + order.products.reduce((sum, p) => {
+      return sum + (p.salePrice * p.quantity);
+    }, 0);
+  }, 0);
+
     const ventesDuJour = ordersToday.reduce(
       (sum, order) => sum + order.products.reduce((s, p) => s + p.quantity, 0),
       0
@@ -37,7 +44,7 @@ exports.getKPI = async (req, res) => {
     // 3️⃣ Produits avec stock faible
     const stockFaible = await Product.countDocuments({
       shopId: shopObjectId,
-      stock: { $lte: 10, $gt: 0 } // stock faible mais pas épuisé
+      stock: { $lte: 10 }
     });
 
     // 4️⃣ Nombre de produits en stock (>0)
@@ -65,7 +72,7 @@ exports.getKPI = async (req, res) => {
     ]);
 
     // 6️⃣ Top 3 articles les plus vendus
-    const topArticles = await Order.aggregate([
+    const topArticles = await Sales.aggregate([
       { $match: { shopId: shopObjectId } },
       { $unwind: "$products" },
       { $group: { _id: "$products.productId", totalQuantity: { $sum: "$products.quantity" } } },
@@ -83,23 +90,29 @@ exports.getKPI = async (req, res) => {
       { $project: { _id: 0, name: "$product.name", totalQuantity: 1 } }
     ]);
 
-    // 7️⃣ Top 3 clients les plus dépensiers
-    const topClients = await Order.aggregate([
-      { $match: { shopId: shopObjectId } },
-      { $group: { _id: "$customerId", totalSpent: { $sum: "$totalAmount" } } },
-      { $sort: { totalSpent: -1 } },
-      { $limit: 3 },
-      {
-        $lookup: {
-          from: "customers",
-          localField: "_id",
-          foreignField: "_id",
-          as: "customer"
-        }
-      },
-      { $unwind: "$customer" },
-      { $project: { _id: 0, name: "$customer.name",contact: "$customer.phone", totalSpent: 1 } }
-    ]);
+  const topClients = await Sales.aggregate([
+    { $match: { shopId: shopObjectId } },
+    { $unwind: "$products" },
+    { $group: {
+        _id: "$customerId",
+        totalSpent: { $sum: { $multiply: ["$products.quantity", "$products.salePrice"] } }
+    }},
+    { $sort: { totalSpent: -1 } },
+    { $limit: 3 },
+    { $lookup: {
+        from: "customers",
+        localField: "_id",
+        foreignField: "_id",
+        as: "customer"
+    }},
+    { $unwind: { path: "$customer", preserveNullAndEmptyArrays: true } },
+    { $project: {
+        _id: 0,
+        name: { $ifNull: ["$customer.name", "Client inconnu"] },
+        contact: { $ifNull: ["$customer.phone", "N/A"] },
+        totalSpent: 1
+    }}
+  ]);
 
     // 🔹 Retour JSON complet
     res.json({

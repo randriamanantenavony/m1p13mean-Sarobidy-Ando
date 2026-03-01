@@ -5,6 +5,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ProductCreate } from '../../models/product';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
+import { getAuthData } from '../../services/auth/auth.util';
+import { Router } from '@angular/router';
 
 
 interface Category {
@@ -30,22 +32,20 @@ export class ShopProductCreate {
   categoryId = ''; // ID statique pour l’instant
   imageUrl = '';
 
-  shopId = ''; // boutique statique
+  shopId: string = localStorage.getItem('shopId') || '';
 
   loading = false;
 
    categories: Category[] = []; // liste dynamique
 
-  constructor(private productService: ProductService, private categoriesService : CategoriesService) {}
+  constructor(private productService: ProductService, private categoriesService : CategoriesService, private router: Router) {}
 
   ngOnInit(){
-     const storedShopId = localStorage.getItem('shopId');
-    if (!storedShopId) {
-      console.error('Aucun shopId trouvé, redirection vers login');
+  const authData = getAuthData(this.router);
+    if (!authData) {
+      console.log('Données manquantes');
       return;
     }
-
-    this.shopId = storedShopId;
     this.loadCategories();
   }
 

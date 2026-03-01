@@ -4,6 +4,8 @@ import { Product } from '../../models/product';
 import { CommonModule, NgFor, NgIf } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
+import { Router } from '@angular/router';
+import { getAuthData } from '../../services/auth/auth.util';
 
 @Component({
   selector: 'app-shop-products',
@@ -21,18 +23,14 @@ export class ShopProducts {
   selectedProduct!: Product | null;
   isEditModalOpen = false;
 
-  constructor(private productService: ProductService, private cdr: ChangeDetectorRef){}
+  constructor(private productService: ProductService, private cdr: ChangeDetectorRef, private router: Router){}
 
   ngOnInit(){
-    this.shopId = '';
-     const storedShopId = localStorage.getItem('shopId');
-    if (!storedShopId) {
-      console.error('Aucun shopId trouvé, redirection vers login');
-      // ici tu peux faire : this.router.navigate(['/login']); si Router injecté
+   const authData = getAuthData(this.router);
+    if (!authData) {
+      console.log('Données manquantes');
       return;
     }
-
-    this.shopId = storedShopId;  
     this.loadProducts();
   }
 
