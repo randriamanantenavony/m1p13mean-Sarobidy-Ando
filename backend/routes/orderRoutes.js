@@ -7,5 +7,6 @@ router.get('/shop/:shopId', orderController.getOrdersByShop);
 router.get('/customer/:customerId', orderController.getOrdersByCustomer);
 router.put('/:id', orderController.updateOrder);
 router.delete('/:id', orderController.deleteOrder);
-
+router.put('/:id/pay', orderController.markAsPaid);
+router.put('/:id/deliver', orderController.markAsDelivered);
 module.exports = router;

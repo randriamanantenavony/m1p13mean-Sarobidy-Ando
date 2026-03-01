@@ -33,8 +33,8 @@ const orderSchema = new mongoose.Schema({
     enum: ['not_started', 'in_progress', 'delivered'], 
     default: 'not_started' 
   },
-  scheduledDate: Date,  // rempli par la boutique
-  actualDate: Date      // rempli par le client
+  scheduledDate: Date, 
+  actualDate: Date  
 }
 
 }, { timestamps: true });

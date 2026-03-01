@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 export interface Shop {
   _id: string;
@@ -41,4 +41,26 @@ export class PromotionService {
   getActivePromotions(): Observable<Promotion[]> {
     return this.http.get<Promotion[]>(this.apiUrl);
   }
+
+  createPromotion(promotionData: any): Observable<any> {
+    return this.http.post<any>(this.apiUrl, promotionData);
+  }
+
+    getPromotionsByShop(shopId: string) {
+      return this.http.get<Promotion[]>(
+        `${this.apiUrl}/shop/${shopId}`
+      );
+    }
+
+  deletePromotion(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.apiUrl}/${id}`);
+  }
+
+   private refreshNeeded = new Subject<void>();
+  refreshNeeded$ = this.refreshNeeded.asObservable();
+
+  notifyRefresh() {
+    this.refreshNeeded.next();
+  }
+
 }

@@ -1,6 +1,6 @@
 const Order = require('../models/boutique/Order');
 const Product = require('../models/boutique/Products');
-const { addNotification } = require('./notificationController');
+const { addNotification } = require('./NotificationController');
 
 exports.createOrder = async (req, res) => {
   try {
@@ -49,6 +49,7 @@ exports.getOrdersByShop = async (req, res) => {
   try {
     const { shopId } = req.params;
     const orders = await Order.find({ shopId })
+                              .sort({ date : -1})
                               .populate('customerId', 'name email phone')
                               .populate('products.productId', 'name price');
     res.status(200).json(orders);
@@ -111,5 +112,60 @@ exports.deleteOrder = async (req, res) => {
 
   } catch (err) {
     res.status(500).json({ error: err.message });
+  }
+};
+
+
+exports.markAsPaid = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Commande non trouvée' });
+    }
+
+    // sécurité : on ne peut payer que si confirmed
+    if (order.status !== 'validated') {
+      return res.status(400).json({
+        message: 'Seules les commandes confirmées peuvent être payées'
+      });
+    }
+
+    order.paymentStatus = 'paid';
+    order.paymentDate = new Date();
+
+    await order.save();
+
+    res.status(200).json({ message: 'Commande marquée comme payée' });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+
+exports.markAsDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) return res.status(404).json({ message: 'Commande non trouvée' });
+
+    if (order.paymentStatus !== 'paid') {
+      return res.status(400).json({ message: 'Paiement requis avant livraison' });
+    }
+
+    // if (order.status === 'validated') {
+    //   return res.status(400).json({ message: 'Commande non validée' });
+    // }
+
+    order.deliveryStatus = 'in_progress';
+    order.deliveryDate = new Date();
+
+    await order.save();
+
+    res.status(200).json({ message: 'Commande marquée comme livrée' });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
   }
 };

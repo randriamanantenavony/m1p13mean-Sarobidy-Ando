@@ -50,9 +50,11 @@ exports.createPurchase = async (req, res) => {
 exports.getPurchases = async (req, res) => {
   try {
     const purchases = await Purchase.find()
+      .sort({ date: -1 }) // 🔥 plus récent en premier
       .populate('shopId', 'name')
       .populate('productId', 'name')
       .populate('supplierId', 'name');
+
     res.status(200).json(purchases);
   } catch (error) {
     res.status(500).json({ message: 'Erreur serveur' });
@@ -66,6 +68,7 @@ exports.getPurchasesByShop = async (req, res) => {
   try {
     const { shopId } = req.params;
     const purchases = await Purchase.find({ shopId })
+      .sort({ date : -1 })
       .populate('productId', 'name')
       .populate('supplierId', 'name email phone');
     res.status(200).json(purchases);
