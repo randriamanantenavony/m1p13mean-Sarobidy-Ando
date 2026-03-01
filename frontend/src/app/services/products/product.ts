@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Product, ProductCreate } from '../../models/product';
 import { Observable, Subject } from 'rxjs';
@@ -12,9 +12,19 @@ export class ProductService {
 
   constructor(private http: HttpClient) {}
 
-  getProductsByShop(shopId: string) {
-  return this.http.get<Product[]>(`${this.apiUrl}/shop/${shopId}`);
-}
+ getProductsByShop(shopId1: string): Observable<Product[]> {
+    // Récupère token et shopId depuis localStorage
+    const token = localStorage.getItem('token');
+    const shopId = localStorage.getItem('shopId');
+
+    if (!token || !shopId) {
+      throw new Error('Token ou shopId manquant');
+    }
+
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.get<Product[]>(`${this.apiUrl}/shop/${shopId}`, { headers });
+  }
 
  updateProduct(productId: string, data: Partial<Product>): Observable<Product> {
     return this.http.put<Product>(

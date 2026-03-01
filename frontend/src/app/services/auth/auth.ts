@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +9,7 @@ import { tap } from 'rxjs/operators';
 export class AuthService {
   private baseUrl = 'http://localhost:5000/api/login';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   login(email: string, password: string) {
     return this.http.post<any>(this.baseUrl, { email, password }).pipe(
@@ -20,14 +21,16 @@ export class AuthService {
     );
   }
 
-  logout() {
-    if (typeof window !== 'undefined') {
-      localStorage.removeItem('token');
-    }
+  getToken(): string | null {
+    return localStorage.getItem('token');
   }
 
-  getToken(): string | null {
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('token');
+  getShopId(): string | null {
+    return localStorage.getItem('shopId');
+  }
+
+ logout(): void {
+    localStorage.clear();      // supprime token, shopId, etc.
+    this.router.navigate(['/login']); // redirige automatiquement
   }
 }

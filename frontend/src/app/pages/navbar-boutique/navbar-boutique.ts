@@ -2,6 +2,7 @@ import { Component, HostListener, Input, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ChangeDetectorRef } from '@angular/core';
+import { AuthService } from '../../services/auth/auth';
 
 export interface NavItem {
   label: string;
@@ -19,6 +20,9 @@ export interface NavItem {
 })
 export class ShopNavbarComponent  {
 isMenuOpen = signal(false);
+
+  constructor(private authService : AuthService) {}
+
 
   toggleMenu() {
     this.isMenuOpen.update(v => !v);
@@ -53,4 +57,9 @@ isMenuOpen = signal(false);
     },
     { label: 'Notifications', route: '/notifications', icon: 'notifications', badge: 'Nouveau' }
   ];
+
+    onLogout() {
+    this.authService.logout();
+  }
+
 }
