@@ -26,18 +26,24 @@ export class ProductService {
     return this.http.get<Product[]>(`${this.apiUrl}/shop/${shopId}`, { headers });
   }
 
- updateProduct(productId: string, data: Partial<Product>): Observable<Product> {
-    return this.http.put<Product>(
-      `${this.apiUrl}/${productId}`,
-      data
-    );
-  }
+updateProduct(productId: string, data: Partial<Product>): Observable<Product> {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Token manquant');
 
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
-  createProduct(data: ProductCreate) {
-  return this.http.post<Product>(`${this.apiUrl}/`, data);
+  return this.http.put<Product>(`${this.apiUrl}/${productId}`, data, { headers });
 }
 
+
+createProduct(data: ProductCreate): Observable<Product> {
+  const token = localStorage.getItem('token');
+  if (!token) throw new Error('Token manquant');
+
+  const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+  return this.http.post<Product>(`${this.apiUrl}/`, data, { headers });
+}
 
 private refreshNeeded = new Subject<void>();
 refreshNeeded$ = this.refreshNeeded.asObservable();

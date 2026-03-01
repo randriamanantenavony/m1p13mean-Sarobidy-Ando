@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -21,16 +21,34 @@ export class AuthService {
     );
   }
 
-  getToken(): string | null {
-    return localStorage.getItem('token');
+ getToken(): string {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      this.router.navigate(['/login']);
+      throw new Error('Token manquant');
+    }
+    return token;
   }
 
-  getShopId(): string | null {
-    return localStorage.getItem('shopId');
+  // Récupère le shopId ou redirige si absent
+  getShopId(): string {
+    const shopId = localStorage.getItem('shopId');
+    if (!shopId) {
+      this.router.navigate(['/login']);
+      throw new Error('ShopId manquant');
+    }
+    return shopId;
   }
 
- logout(): void {
-    localStorage.clear();      // supprime token, shopId, etc.
-    this.router.navigate(['/login']); // redirige automatiquement
+  // Retourne les headers HTTP avec le token
+  getAuthHeaders(): HttpHeaders {
+    const token = this.getToken(); // appelle la fonction qui gère la redirection
+    return new HttpHeaders().set('Authorization', `Bearer ${token}`);
   }
+
+    logout(): void {
+    localStorage.clear();
+    this.router.navigate(['/login']);
+  }
+
 }

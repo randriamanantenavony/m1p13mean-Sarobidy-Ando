@@ -33,7 +33,7 @@ export class SalesListComponent implements OnInit {
 
   loadSales() {
     this.loading = true;
-    this.salesService.getSalesByShop(this.shopId)
+    this.salesService.getSalesByShop()
       .pipe(
         map(sales => sales.sort((a,b) => new Date(b.date).getTime() - new Date(a.date).getTime())) // tri par date desc
       )

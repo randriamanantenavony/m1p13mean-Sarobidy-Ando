@@ -88,24 +88,22 @@
       </ul>
     </li>
 
-    <li>
-      <span class="nav-item" routerLink="/login" style="cursor: pointer;">
-        <i class="fa-solid fa-bell"></i> Login
-        <i class="fa-solid fa-chevron-down arrow"></i>
-      </span>
-    </li>
-
     <li class="no-dropdown">
       <span class="nav-item active" routerLink="/boutique/main" style="cursor:pointer;">
         <i class="fa-solid fa-gauge-high"></i> Dashboard
       </span>
     </li>
 
-<span class="nav-item" (click)="onLogout()" style="cursor: pointer;">
-  <i class="fa-solid fa-bell"></i> Logout
-  <i class="fa-solid fa-chevron-down arrow"></i>
-</span>
+  <li>
+    <span class="nav-item" routerLink="/login" style="cursor: pointer;">
+      <i class="fa-solid fa-sign-in-alt"></i> Login
+      <i class="fa-solid fa-chevron-down arrow"></i>
+    </span>
+  </li>
 
-
+  <span class="nav-item" (click)="onLogout()" style="cursor: pointer;">
+    <i class="fa-solid fa-sign-out-alt"></i> Logout
+    <i class="fa-solid fa-chevron-down arrow"></i>
+  </span>
   </ul>
 </nav>

@@ -32,7 +32,7 @@ export class ShopProductCreate {
   categoryId = ''; // ID statique pour l’instant
   imageUrl = '';
 
-  shopId = ''; // boutique statique
+  shopId: string = localStorage.getItem('shopId') || '';
 
   loading = false;
 
