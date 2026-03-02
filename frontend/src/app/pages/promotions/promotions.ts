@@ -27,14 +27,26 @@ export class PromotionComponents implements OnInit , OnDestroy {
   constructor(private promotionService: PromotionService, private cdr: ChangeDetectorRef, private ElementRef: ElementRef,  @Inject(DOCUMENT) private document: Document, private shopService: ShopService) {}
 
   ngOnInit(): void {
-    console.log('Initialisation du composant promotions');
-    this.document.body.appendChild(this.ElementRef.nativeElement); // Assure que le composant est au-dessus du plan du centre commercial
-    this.document.body.style.overflow = 'hidden'; // Empêche le scroll du fond
-    this.promotionService.refreshNeeded$.subscribe(() => {
-    this.loadPromotions();
-    this.cdr.detectChanges();
+    console.log('🟢 Initialisation du composant promotions');
 
-  });
+    // ⚡ Ajouter le composant au body
+    console.log('🔹 Ajout du composant au body');
+    this.document.body.appendChild(this.ElementRef.nativeElement);
+    this.document.body.style.overflow = 'hidden';
+
+    // ⚡ S'abonner aux refresh du service
+    console.log('🔹 Abonnement à refreshNeeded$');
+    this.promotionService.refreshNeeded$.subscribe({
+      next: () => {
+        console.log('🔄 Refresh reçu via refreshNeeded$, appel loadPromotions()');
+        this.loadPromotions();
+      },
+      error: (err) => console.error('❌ Erreur subscription refreshNeeded$', err)
+    });
+
+    // ⚡ Charger les promotions dès le démarrage
+    console.log('📌 Appel initial de loadPromotions()');
+    this.loadPromotions();
   }
 
   ngOnDestroy(): void {
@@ -42,24 +54,51 @@ export class PromotionComponents implements OnInit , OnDestroy {
     this.document.body.style.overflow = 'auto'; // Restaure le scroll du fond
   }
 
-  loadPromotions(): void {
-    console.log('Chargement des promotions...');
-    this.loading = true;
-    this.promotionService.getActivePromotions().subscribe({
-      next: (data) => {
-        this.promotions = data;
-        console.log('Promotions reçues:', this.promotions);
-        this.promotionsloaded.emit();
-        this.loading = false;
-        this.cdr.detectChanges();
-      },
-      error: (err) => {
-        console.error('Erreur récupération promotions:', err);
-        this.errorMessage = 'Impossible de charger les promotions.';
-        this.loading = false;
-      }
-    });
+loadPromotions(): void {
+  console.log('📌 loadPromotions() appelé');
+
+  this.loading = true;
+  console.log('⏳ loading mis à true');
+
+  // Vérifier si le service existe
+  if (!this.promotionService || !this.promotionService.getActivePromotions) {
+    console.error('❌ promotionService ou getActivePromotions non défini');
+    this.loading = false;
+    return;
   }
+
+  console.log('🔗 Appel du service getActivePromotions()...');
+  this.promotionService.getActivePromotions().subscribe({
+    next: (data) => {
+      console.log('✅ Réponse du backend reçue:', data);
+
+      this.promotions = data;
+
+      console.log(`📊 Nombre de promotions reçues: ${data.length}`);
+
+      // Émission de l’événement
+      this.promotionsloaded.emit();
+      console.log('📢 promotionsloaded émis');
+
+      this.loading = false;
+      console.log('⏹ loading mis à false');
+
+      this.cdr.detectChanges();
+      console.log('🔄 detectChanges() appelé');
+    },
+    error: (err) => {
+      console.error('❌ Erreur récupération promotions:', err);
+
+      this.errorMessage = 'Impossible de charger les promotions.';
+      console.log('⚠️ errorMessage mis à jour:', this.errorMessage);
+
+      this.loading = false;
+      console.log('⏹ loading mis à false après erreur');
+    }
+  });
+
+  console.log('🔚 Fin de loadPromotions() (abonnement en cours)');
+}
 
   closeModal(){
     this.close.emit();
