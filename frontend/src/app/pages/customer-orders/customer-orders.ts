@@ -2,10 +2,11 @@ import { Component } from '@angular/core';
 import { Order } from '../../models/order';
 import { OrderService } from '../../services/orders/orders';
 import { CommonModule, NgIf } from '@angular/common';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-customer-orders',
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule, NgIf, Footer],
   templateUrl: './customer-orders.html',
   styleUrl: './customer-orders.css',
 })

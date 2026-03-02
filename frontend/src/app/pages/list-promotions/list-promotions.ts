@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, Input, OnChanges, OnInit, SimpleChanges }
 import { PromotionService } from '../../services/promotions/promotion';
 import { map } from 'rxjs';
 import { CommonModule } from '@angular/common';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-list-promotions',
-  imports: [CommonModule],
+  imports: [CommonModule, Footer],
   templateUrl: './list-promotions.html',
   styleUrl: './list-promotions.css',
 })

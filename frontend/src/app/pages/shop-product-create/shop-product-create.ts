@@ -7,6 +7,7 @@ import { ProductCreate } from '../../models/product';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 import { getAuthData } from '../../services/auth/auth.util';
 import { Router } from '@angular/router';
+import { Footer } from '../footer/footer';
 
 
 interface Category {
@@ -17,7 +18,7 @@ interface Category {
 
 @Component({
   selector: 'app-shop-product-create',
-  imports: [CommonModule, FormsModule, ShopNavbarComponent],
+  imports: [CommonModule, FormsModule, ShopNavbarComponent, Footer],
   templateUrl: './shop-product-create.html',
   styleUrls: ['./shop-product-create.css'],
 })

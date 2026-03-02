@@ -11,6 +11,7 @@ import { Favorite } from '../../services/favorites/favorite';
 import { AddToCartButtonComponent } from "../../shared/add-to-cart-button/add-to-cart-button";
 import { ProductRating } from '../product-rating/product-rating';
 import { ProductRatingService } from '../../services/rating/rating';
+import { Footer } from '../footer/footer';
 
 const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
 
@@ -18,7 +19,7 @@ const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton, AddToCartButtonComponent, ProductRating],
+  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton, AddToCartButtonComponent, ProductRating, Footer],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'],
 })
