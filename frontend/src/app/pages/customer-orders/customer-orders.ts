@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { Order } from '../../models/order';
 import { OrderService } from '../../services/orders/orders';
 import { CommonModule, NgIf } from '@angular/common';
@@ -15,13 +15,14 @@ export class CustomerOrders {
   loading = true;
   customerId = '698d97f5577689b61e329ed7';
 
-  constructor(private orderService: OrderService) {}
+  constructor(private orderService: OrderService, private cdr: ChangeDetectorRef) {}
 
   ngOnInit(): void {
     this.orderService.getOrdersByCustomer(this.customerId).subscribe({
       next: (data) => {
         this.orders = data;
         this.loading = false;
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error(err);

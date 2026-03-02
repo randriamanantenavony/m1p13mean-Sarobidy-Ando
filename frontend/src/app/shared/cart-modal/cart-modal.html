@@ -6,7 +6,6 @@
 
   <div class="modal-body" *ngIf="!loading; else loadingTpl">
     <!-- Debug JSON -->
-    <pre>{{ carts | json }}</pre>
 
     <!-- Si le panier est vide -->
     <div *ngIf="carts.length === 0">
@@ -14,6 +13,7 @@
     </div>
 
     <!-- Boucle sur chaque boutique -->
+
     <div *ngFor="let cart of carts" class="shop-cart">
       <h4>{{ cart.shop?.name || 'Boutique inconnue' }}</h4>
 
@@ -32,11 +32,8 @@
             <button class="remove-btn" (click)="removeProduct(cart.cartId, product.productId)">Supprimer</button>
           </div>
         </li>
-      </ul>
 
-      <p class="shop-total">
-        Total boutique: {{ getCartTotal(cart.products) | number }} AR
-      </p>
+      </ul>
       <button class="checkout-btn" (click)="checkoutCart(cart.cartId)">Passer la commande</button>
     </div>
 
