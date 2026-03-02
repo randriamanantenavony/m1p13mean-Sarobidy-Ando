@@ -6,10 +6,11 @@ import { FormsModule } from '@angular/forms';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 import { Router } from '@angular/router';
 import { getAuthData } from '../../services/auth/auth.util';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-shop-products',
-  imports: [CommonModule, NgIf, NgFor, FormsModule,ShopNavbarComponent],
+  imports: [CommonModule, NgIf, NgFor, FormsModule,ShopNavbarComponent, Footer],
   templateUrl: './shop-products.html',
   styleUrls: ['./shop-products.css'],
 })

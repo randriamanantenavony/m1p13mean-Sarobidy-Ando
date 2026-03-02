@@ -6,11 +6,12 @@ import { Customers } from '../../services/customer/customers';
 import { SalesService } from '../../services/sales/sales';
 import { SalesListComponent } from "../liste-ventes/liste-ventes";
 import { ShopNavbarComponent } from "../navbar-boutique/navbar-boutique";
+import { Footer } from '../footer/footer';
 
 
 @Component({
   selector: 'app-sales',
-  imports: [CommonModule, ReactiveFormsModule, SalesListComponent, ShopNavbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, SalesListComponent, ShopNavbarComponent, Footer],
   templateUrl: './sales.html',
   styleUrl: './sales.css',
 })
