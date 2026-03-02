@@ -31,7 +31,7 @@
 
   width: 92%;
   max-width: 500px;
-  max-height: 80vh;    /* fallback navigateurs anciens */
+  max-height: 90vh;    /* fallback navigateurs anciens */
   max-height: 80dvh;   /* hauteur visible réelle, sans les barres nav */
   /* Padding pour ne pas coller aux bords des encoches */
   padding-bottom: env(safe-area-inset-bottom);
@@ -293,7 +293,7 @@
 /* ── Total boutique ── */
 .shop-total {
   margin: 0;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1rem;
   font-size: 0.8rem;
   font-weight: 700;
   color: #1976d2;

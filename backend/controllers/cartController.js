@@ -5,6 +5,7 @@ const { addNotification } = require('./notificationController');
 
 // Ajouter un produit au panier
 exports.addToCart = async (req, res) => {
+  console.log('j suis dans la methode addCart');
   try {
     const { clientId, shopId, productId, quantity } = req.body;
 
