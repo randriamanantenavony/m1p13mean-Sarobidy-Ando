@@ -48,6 +48,8 @@ loadCart() {
         console.log('⏹️ Fin du chargement (succès)');
         console.log('🛒 Panier mis à jour:', this.carts);
         this.carts.forEach(cart => console.log('Products:', cart.products));
+                this.cdr.detectChanges();
+
       },
       error: (err) => {
         console.error(err);
@@ -103,6 +105,6 @@ updateTotalItems() {
       }
     });
   }
-  
+
 
 }
