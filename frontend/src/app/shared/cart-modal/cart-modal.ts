@@ -13,7 +13,7 @@ import { CartProduct } from '../../models/cart';
 })
 export class CartModalComponent {
 
-  @Input() clientId!: string;
+  clientId = '64b8c9e5f1a2c9b1d2e3f4a5';
 
   isOpen = false;
   carts: any[] = [];
@@ -23,7 +23,6 @@ export class CartModalComponent {
   constructor(private cartService: CartService, private cdr: ChangeDetectorRef) {}
 
   open() {
-    if (!this.clientId) return;
     this.isOpen = true;
     this.loadCart();
   }
@@ -47,9 +46,6 @@ loadCart() {
         console.log('etat du loading après mise à jour:', this.loading);
         console.log('⏹️ Fin du chargement (succès)');
         console.log('🛒 Panier mis à jour:', this.carts);
-        this.carts.forEach(cart => console.log('Products:', cart.products));
-                this.cdr.detectChanges();
-
       },
       error: (err) => {
         console.error(err);
