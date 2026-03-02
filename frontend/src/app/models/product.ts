@@ -12,7 +12,7 @@ export interface Product {
 }
 
 export interface ProductUI extends Product {
-  isFavorite: boolean;
+isFavorite: boolean;
 }
 
 
