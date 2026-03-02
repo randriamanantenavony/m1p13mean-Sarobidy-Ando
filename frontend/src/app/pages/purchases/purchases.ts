@@ -8,11 +8,12 @@ import { ProductService } from '../../services/products/product';
 import { PurchasesList } from "../purchases-list/purchases-list";
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
 import { Subject } from 'rxjs';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-purchases',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, PurchasesList, ShopNavbarComponent],
+  imports: [CommonModule, ReactiveFormsModule, PurchasesList, ShopNavbarComponent, Footer],
   templateUrl: './purchases.html',
   styleUrls: ['./purchases.css'],
 })

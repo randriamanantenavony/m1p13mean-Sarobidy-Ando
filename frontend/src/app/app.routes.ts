@@ -13,6 +13,7 @@ import { ShopNavbarComponent } from './pages/navbar-boutique/navbar-boutique';
 import { DashboardBoutique } from './pages/dashboard/dashboard';
 import { BoutiqueMain } from './pages/boutique-main/boutique-main';
 import { LoginBoutique } from './pages/login-boutique/login-boutique';
+import { CustomerOrders } from './pages/customer-orders/customer-orders';
 
 export const routes: Routes = [
     {path : 'shop-list', component : ShopList},
@@ -28,5 +29,6 @@ export const routes: Routes = [
     {path : 'navbar', component : ShopNavbarComponent},
     {path : 'dashboard', component : DashboardBoutique},
     {path : 'boutique/main', component : BoutiqueMain},
+    {path : 'customer-order', component : CustomerOrders},
     { path: '', redirectTo: 'login', pathMatch: 'full' }
   ];

@@ -43,6 +43,7 @@ app.use('/api/delivery',authMiddleware, require('./routes/deliveryRoutes'));
 app.use('/api/favorites', require('./routes/favoriteRoutes'));
 app.use('/api/dashboard',authMiddleware, require('./routes/dashboardRoutes'));
 app.use('/api/login', require('./routes/loginRoutes')); 
+app.use('/api/ratings', require('./routes/ratingRoutes')); 
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {

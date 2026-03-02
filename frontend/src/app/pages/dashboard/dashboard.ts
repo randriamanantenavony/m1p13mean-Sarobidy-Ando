@@ -6,13 +6,14 @@ import { registerLocaleData } from '@angular/common';
 import localeFr from '@angular/common/locales/fr';
 import { Router } from '@angular/router';
 import { getAuthData } from '../../services/auth/auth.util';
+import { Footer } from '../footer/footer';
 
 
 registerLocaleData(localeFr);
 
 @Component({
   selector: 'app-dashboard',
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule, NgIf,Footer],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',
 })
@@ -30,7 +31,7 @@ export class DashboardBoutique {
 
   today: string = formatDate(new Date(), 'dd/MM/yyyy', 'fr');
 
-  constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef, private router: Router) { }
+  constructor(private dashboardService: DashboardService,  private cdr: ChangeDetectorRef, private router: Router ) { }
 
   ngOnInit(): void {
    const authData = getAuthData(this.router);

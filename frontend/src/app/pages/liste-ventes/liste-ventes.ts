@@ -2,10 +2,11 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule, NgIf, NgFor } from '@angular/common';
 import { map } from 'rxjs/operators';
 import { SalesService } from '../../services/sales/sales';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-liste-ventes',
-  imports: [CommonModule, NgIf, NgFor],
+  imports: [CommonModule, NgIf, NgFor, Footer],
   templateUrl: './liste-ventes.html',
   styleUrl: './liste-ventes.css',
 })

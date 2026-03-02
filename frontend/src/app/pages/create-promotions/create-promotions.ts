@@ -5,10 +5,11 @@ import { ProductService } from '../../services/products/product';
 import { CommonModule } from '@angular/common';
 import { ListPromotions } from '../list-promotions/list-promotions';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-create-promotions',
-  imports: [CommonModule,ReactiveFormsModule, ListPromotions, ShopNavbarComponent],
+  imports: [CommonModule,ReactiveFormsModule, ListPromotions, ShopNavbarComponent, Footer],
   templateUrl: './create-promotions.html',
   styleUrl: './create-promotions.css',
 })

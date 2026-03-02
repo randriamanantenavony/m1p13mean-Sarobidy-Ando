@@ -4,11 +4,12 @@ import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { OrderService } from '../../services/orders/orders';
 import { CommonModule } from '@angular/common';
 import { ShopNavbarComponent } from '../navbar-boutique/navbar-boutique';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-list-orders',
   templateUrl: './list-orders.html',
-  imports: [CommonModule, NgIf ,NgFor, ShopNavbarComponent],
+  imports: [CommonModule, NgIf ,NgFor, ShopNavbarComponent, Footer],
   styleUrls: ['./list-orders.css'],
 })
 export class ListOrdersComponent implements OnInit {

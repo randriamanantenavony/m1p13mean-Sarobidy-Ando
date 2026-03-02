@@ -1,10 +1,11 @@
 import { PurchaseService } from './../../services/purchase/purchase';
 import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 import { CommonModule, NgIf } from '@angular/common';
+import { Footer } from '../footer/footer';
 
 @Component({
   selector: 'app-purchases-list',
-  imports: [CommonModule, NgIf],
+  imports: [CommonModule, NgIf, Footer],
   templateUrl: './purchases-list.html',
   styleUrl: './purchases-list.css',
 })

@@ -9,6 +9,9 @@ import { ChangeDetectorRef } from '@angular/core';
 import { FavoriteButton } from '../../shared/favorite-button/favorite-button';
 import { Favorite } from '../../services/favorites/favorite';
 import { AddToCartButtonComponent } from "../../shared/add-to-cart-button/add-to-cart-button";
+import { ProductRating } from '../product-rating/product-rating';
+import { ProductRatingService } from '../../services/rating/rating';
+import { Footer } from '../footer/footer';
 
 const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
 
@@ -16,7 +19,7 @@ const STATIC_USER_ID = '64b8c9e5f1a2c9b1d2e3f4a5';
   selector: 'app-shop-list',
   standalone: true,
   providers: [{ provide: LOCALE_ID, useValue: 'fr-FR' }],
-  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton, AddToCartButtonComponent],
+  imports: [NgIf, NgForOf, CommonModule, NavbarComponent, FavoriteButton, AddToCartButtonComponent, ProductRating, Footer],
   templateUrl: './shop-list.html',
   styleUrls: ['./shop-list.css'],
 })
@@ -30,9 +33,12 @@ export class ShopList implements OnInit {
   products: ProductUI[] = [];
   isFavorite: boolean = false;
 
+  avgRatings: { [productId: string]: number } = {};
+
+  userId = '698d97f5577689b61e329ed7';
   selectedCategoryId: string | null = null; // ✅ IMPORTANT
 
-  constructor(private shopService: ShopService, private cdr: ChangeDetectorRef, private favoriteService: Favorite) {}
+  constructor(private shopService: ShopService, private cdr: ChangeDetectorRef, private favoriteService: Favorite, private productRatingService : ProductRatingService) {}
 
   ngOnInit(): void {
     this.loadAllShops(); // charge tout au départ
@@ -223,6 +229,27 @@ onProductAddedToCart(event: any) {
   alert(`Produit "${event.product.name}" ajouté au panier !`); // Simple alert pour feedback
   // Ou afficher notification
   // this.toastr.success('Produit ajouté au panier');
+}
+
+onRatingChanged(newRating: number, product: any) {
+  const customerId = this.userId;
+
+  this.productRatingService.rateProduct(product._id, customerId, newRating)
+    .subscribe(res => {
+      // stocke dans le dictionnaire, pas dans product
+      this.avgRatings[product._id] = res.avgRating;
+      this.totalVotes[product._id] = res.totalVotes;
+    });
+}
+
+loadRatings: { [productId: string]: boolean } = {};
+
+currentProductId: string | null = null;
+totalVotes: { [productId: string]: number } = {};
+
+showRatings(product: any) {
+  console.log('📌 Clic sur Voir les avis pour', product._id);
+  this.currentProductId = product._id;
 }
 
 }
