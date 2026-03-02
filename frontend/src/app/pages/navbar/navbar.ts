@@ -7,11 +7,12 @@ import { ListeCategory } from '../liste-category/liste-category';
 import { PromotionComponents } from '../promotions/promotions';
 import { ChangeDetectorRef } from '@angular/core';
 import { CartModalComponent } from '../../shared/cart-modal/cart-modal';
+import { CustomerOrders } from '../customer-orders/customer-orders';
 
 @Component({
   selector: 'app-navbar',
   standalone: true,
-  imports: [RouterModule, CommonModule,MallPlan,ListeCategory, PromotionComponents,CartModalComponent ],
+  imports: [RouterModule, CommonModule,MallPlan,ListeCategory, PromotionComponents,CartModalComponent,CustomerOrders ],
   templateUrl: './navbar.html',
   styleUrls: ['./navbar.css'],
 })
@@ -73,5 +74,16 @@ promotionsCount = 0;
 onPromotionsLoaded(count: number): void {
   this.promotionsCount = count;
 }
+
+showOrdersModal = false;
+
+openOrders() {
+  this.showOrdersModal = true;
+}
+
+closeOrders() {
+  this.showOrdersModal = false;
+}
+
 
 }

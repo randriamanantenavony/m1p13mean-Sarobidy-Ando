@@ -154,9 +154,9 @@ exports.markAsDelivered = async (req, res) => {
       return res.status(400).json({ message: 'Paiement requis avant livraison' });
     }
 
-    // if (order.status === 'validated') {
-    //   return res.status(400).json({ message: 'Commande non validée' });
-    // }
+    if (order.status === 'validated') {
+      return res.status(400).json({ message: 'Commande non validée' });
+    }
 
     order.deliveryStatus = 'in_progress';
     order.deliveryDate = new Date();
@@ -168,4 +168,34 @@ exports.markAsDelivered = async (req, res) => {
   } catch (err) {
     res.status(500).json({ message: err.message });
   }
+
+
+};
+
+exports.markAsDeliveredByCustomer = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) return res.status(404).json({ message: 'Commande non trouvée' });
+
+    if (order.paymentStatus !== 'paid') {
+      return res.status(400).json({ message: 'Paiement requis avant livraison' });
+    }
+
+  if (order.status !== 'validated') {
+    return res.status(400).json({ message: 'Commande non validée' });
+  }
+
+    order.deliveryStatus = 'delivered';
+    order.deliveryDate = new Date();
+
+    await order.save();
+
+    res.status(200).json({ message: 'Commande marquée comme livrée' });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+
+  
 };

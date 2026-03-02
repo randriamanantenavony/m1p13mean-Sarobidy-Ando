@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, Subject } from 'rxjs';
+import { Order } from '../../models/order';
 
 @Injectable({
   providedIn: 'root'
@@ -30,11 +31,19 @@ markAsDelivered(orderId: string) {
   return this.http.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {});
 }
 
+markAsDeliveredByCustomer(orderId: string) {
+  return this.http.put(`http://localhost:5000/api/orders/${orderId}/delivered`, {});
+}
  private refreshNeeded = new Subject<void>();
   refreshNeeded$ = this.refreshNeeded.asObservable();
 
   notifyRefresh() {
     this.refreshNeeded.next();
   }
-  
+
+getOrdersByCustomer(customerId : string): Observable<Order[]> {
+  return this.http.get<Order[]>(`${this.apiUrl}/customer/${customerId}`);
+}
+
+
 }
