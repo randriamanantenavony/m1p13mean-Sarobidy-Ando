@@ -14,6 +14,12 @@ import { DashboardBoutique } from './pages/dashboard/dashboard';
 import { BoutiqueMain } from './pages/boutique-main/boutique-main';
 import { LoginBoutique } from './pages/login-boutique/login-boutique';
 import { CustomerOrders } from './pages/customer-orders/customer-orders';
+import { Lots } from './pages/lots/lots';
+import { AddLot } from './pages/lots/add/add';
+import { Boutique } from './pages/boutique/boutique';
+import { AddBoutique } from './pages/boutique/add-boutique/add-boutique';
+import { Contrats } from './pages/contrats/contrats';
+import { AddContrat } from './pages/contrats/add-contrat/add-contrat';
 
 export const routes: Routes = [
     {path : 'shop-list', component : ShopList},
@@ -30,5 +36,15 @@ export const routes: Routes = [
     {path : 'dashboard', component : DashboardBoutique},
     {path : 'boutique/main', component : BoutiqueMain},
     {path : 'customer-order', component : CustomerOrders},
-    { path: '', redirectTo: 'login', pathMatch: 'full' }
+    { path: '', redirectTo: 'login', pathMatch: 'full' },
+    {path : 'lots', component : Lots},
+    {path : 'lots/add', component : AddLot},
+    {path: 'lots/add/:id',component: AddLot}, 
+    {path : 'boutiques', component : Boutique},
+    {path : 'boutique/add', component : AddBoutique},
+    {path: 'boutique/add/:id',component: AddBoutique},  
+    {path : 'contrats', component : Contrats},
+    {path : 'contrats/add', component : AddContrat},
+    {path: 'contrats/add/:id',component: AddContrat}
+
   ];

@@ -13,8 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class LoginBoutique {
 
-  email: string = 'shop@mail.com';
-  password: string = '123456';
+  email: string = 'techstorecT@gmail.com';
+  password: string = '2a2abc52';
   loading: boolean = false;
 
   constructor(
@@ -41,7 +41,7 @@ login() {
 
         console.log('🔹 Stockage du token et du shopId');
         localStorage.setItem('token', res.token);
-        localStorage.setItem('shopId', res.user.shop);
+        localStorage.setItem('shopId', res.boutiqueId);
         console.log('🔹 token et shopId stockés:',
                     localStorage.getItem('token'),
                     localStorage.getItem('shopId'));

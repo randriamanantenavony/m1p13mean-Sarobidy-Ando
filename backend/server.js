@@ -4,6 +4,10 @@ const connectDB = require('./config/db');
 const shopRoutes = require('./routes/shopRoutes');
 const cors = require('cors');
 const authMiddleware = require('./middleware/authMiddleware');
+const authRoutes = require('./routes/authRoutes');
+const { notFound, errorHandler } = require('./middleware/errorHandler');
+const lotRoutes = require("./routes/lotRoutes");
+const boutiqueRoutes = require("./routes/boutiqueRoutes");
 require('./cron/promotion'); 
 
 
@@ -25,7 +29,8 @@ const app = express();
 // Middleware
 app.use(express.json());
 app.use(cors());
-
+const factureRoutes = require('./routes/factureRoutes');
+app.use('/api/factures', factureRoutes);
 // Routes
 app.use('/api/shops', shopRoutes);
 app.use('/api/categories_products', require('./routes/categoryRoutes'));
@@ -44,6 +49,12 @@ app.use('/api/favorites', require('./routes/favoriteRoutes'));
 app.use('/api/dashboard',authMiddleware, require('./routes/dashboardRoutes'));
 app.use('/api/login', require('./routes/loginRoutes')); 
 app.use('/api/ratings', require('./routes/ratingRoutes')); 
+app.use('/api/auth', authRoutes);
+app.use("/api/lots", lotRoutes);
+app.use("/api/boutiques", boutiqueRoutes);
+app.use("/api/contrats", require('./routes/contratRoutes'));
+app.use(notFound);
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
