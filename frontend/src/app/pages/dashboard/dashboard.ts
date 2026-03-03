@@ -42,20 +42,50 @@ export class DashboardBoutique {
     this.loadDashboard();
   }
 
-  loadDashboard() {
-    this.dashboardService.getKPIs().subscribe({
-      next: (data) => {
-        this.caDuJour = data.caDuJour;
-        this.ventesDuJour = data.ventesDuJour;
-        this.commandesEnAttente = data.commandesEnAttente;
-        this.stockFaible = data.stockFaible;
-        this.produitsEnStock = data.produitsEnStock;
-        this.stockParCategorie = data.stockParCategorie;
-        this.topArticles = data.topArticles;
-        this.topClients = data.topClients;
-        this.cdr.detectChanges();
-      },
-      error: (err) => console.error('Erreur récupération KPI:', err)
-    });
-  }
+loadDashboard() {
+  console.log("🚀 loadDashboard() appelé");
+
+  this.dashboardService.getKPIs().subscribe({
+    next: (data) => {
+      console.log("✅ Réponse KPI reçue :", data);
+
+      if (!data) {
+        console.warn("⚠️ data est vide ou undefined");
+        return;
+      }
+
+      console.log("📊 CA du jour :", data.caDuJour);
+      console.log("🛒 Ventes du jour :", data.ventesDuJour);
+      console.log("⏳ Commandes en attente :", data.commandesEnAttente);
+      console.log("⚠️ Stock faible :", data.stockFaible);
+      console.log("📦 Produits en stock :", data.produitsEnStock);
+      console.log("📂 Stock par catégorie :", data.stockParCategorie);
+      console.log("🏆 Top articles :", data.topArticles);
+      console.log("👑 Top clients :", data.topClients);
+
+      this.caDuJour = data.caDuJour;
+      this.ventesDuJour = data.ventesDuJour;
+      this.commandesEnAttente = data.commandesEnAttente;
+      this.stockFaible = data.stockFaible;
+      this.produitsEnStock = data.produitsEnStock;
+      this.stockParCategorie = data.stockParCategorie;
+      this.topArticles = data.topArticles;
+      this.topClients = data.topClients;
+
+      console.log("🎯 Variables locales mises à jour :", {
+        caDuJour: this.caDuJour,
+        ventesDuJour: this.ventesDuJour,
+        commandesEnAttente: this.commandesEnAttente,
+        stockFaible: this.stockFaible
+      });
+
+      this.cdr.detectChanges();
+      console.log("🔄 detectChanges() exécuté");
+    },
+
+    error: (err) => {
+      console.error("❌ Erreur récupération KPI :", err);
+    }
+  });
+}
 }

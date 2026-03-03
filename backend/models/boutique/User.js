@@ -4,7 +4,7 @@ const bcrypt = require('bcrypt');
 const userSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  shop: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true }
+  shopId: { type: mongoose.Schema.Types.ObjectId, ref: 'Shop', required: true }
 });
 
 // méthode pour comparer mot de passe

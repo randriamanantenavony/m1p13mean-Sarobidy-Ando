@@ -7,7 +7,7 @@ import { AuthService } from '../auth/auth';
   providedIn: 'root',
 })
 export class SalesService {
-  private apiUrl = 'http://localhost:5000/api/sales';
+  private apiUrl = 'https://centrecom.up.railway.app/api/sales';
 
   constructor(private http: HttpClient, private authService: AuthService) {}
 

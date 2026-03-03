@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
 })
 export class SupplierService {
 
-  private apiUrl = 'http://localhost:5000/api/suppliers';
+  private apiUrl = 'https://centrecom.up.railway.app/api/suppliers';
 
   constructor(private http: HttpClient) {}
 

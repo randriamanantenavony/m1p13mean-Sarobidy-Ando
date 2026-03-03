@@ -34,7 +34,7 @@ export interface Promotion {
   providedIn: 'root'
 })
 export class PromotionService {
-  private apiUrl = 'http://localhost:5000/api/promotions';
+  private apiUrl = 'https://centrecom.up.railway.app/api/promotions';
 
   constructor(private http: HttpClient) {}
 

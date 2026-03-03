@@ -10,7 +10,7 @@ import { Purchase } from '../../models/purchase';
 })
 export class PurchaseService {
 
-  private apiUrl = 'http://localhost:5000/api/purchases';
+  private apiUrl = 'https://centrecom.up.railway.app/api/purchases';
 
   private refreshNeeded = new Subject<void>();
   refreshNeeded$ = this.refreshNeeded.asObservable();

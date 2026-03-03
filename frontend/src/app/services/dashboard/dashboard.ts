@@ -9,7 +9,7 @@ import { getAuthData } from '../auth/auth.util';
 })
 export class DashboardService {
 
-  private baseUrl = 'http://localhost:5000/api/dashboard';
+  private baseUrl = 'https://centrecom.up.railway.app/api/dashboard';
 
   constructor(private http: HttpClient, private router: Router) {}
 

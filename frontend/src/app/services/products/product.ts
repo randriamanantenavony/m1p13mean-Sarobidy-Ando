@@ -8,7 +8,7 @@ import { Observable, Subject } from 'rxjs';
 })
 export class ProductService {
 
-  private apiUrl = 'http://localhost:5000/api/products';
+  private apiUrl = 'https://centrecom.up.railway.app/api/products';
 
   constructor(private http: HttpClient) {}
 

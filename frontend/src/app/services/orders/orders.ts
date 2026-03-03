@@ -7,8 +7,8 @@ import { Order } from '../../models/order';
   providedIn: 'root'
 })
 export class OrderService {
-  private apiUrl = 'http://localhost:5000/api/orders';
-  private validateOrderUrl = 'http://localhost:5000/api/orders/validate';
+  private apiUrl = 'https://centrecom.up.railway.app/api/orders';
+  private validateOrderUrl = 'https://centrecom.up.railway.app/api/orders/validate';
 
   constructor(private http: HttpClient) {}
 
@@ -22,17 +22,17 @@ export class OrderService {
 
   markAsPaid(orderId: string) {
   return this.http.put(
-    `http://localhost:5000/api/orders/${orderId}/pay`,
+    `https://centrecom.up.railway.app/api/orders/${orderId}/pay`,
     {}
   );
 }
 
 markAsDelivered(orderId: string) {
-  return this.http.put(`http://localhost:5000/api/orders/${orderId}/deliver`, {});
+  return this.http.put(`https://centrecom.up.railway.app/api/orders/${orderId}/deliver`, {});
 }
 
 markAsDeliveredByCustomer(orderId: string) {
-  return this.http.put(`http://localhost:5000/api/orders/${orderId}/delivered`, {});
+  return this.http.put(`https://centrecom.up.railway.app/api/orders/${orderId}/delivered`, {});
 }
  private refreshNeeded = new Subject<void>();
   refreshNeeded$ = this.refreshNeeded.asObservable();

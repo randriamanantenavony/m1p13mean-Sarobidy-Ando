@@ -7,7 +7,7 @@ import { Observable } from 'rxjs/internal/Observable';
 })
 export class Favorite {
 
-  private apiUrl = 'http://localhost:5000/api/favorites';
+  private apiUrl = 'https://centrecom.up.railway.app/api/favorites';
 
   constructor(private http: HttpClient) {}
 

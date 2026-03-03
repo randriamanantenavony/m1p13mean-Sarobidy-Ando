@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:3000/api/auth/login';
+  private baseUrl = 'https://centrecom.up.railway.app/api/auth/login';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -15,7 +15,8 @@ export class AuthService {
     return this.http.post<any>(this.baseUrl, { email, password }).pipe(
       tap(res => {
         if (res.token && typeof window !== 'undefined') {
-          localStorage.setItem('token', res.token); // stocke le token
+          localStorage.setItem('token', res.token);
+          localStorage.setItem('shopId', res.boutiqueId);
         }
       })
     );

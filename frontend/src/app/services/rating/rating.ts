@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class ProductRatingService {
-  private apiUrl = 'http://localhost:5000/api/ratings'; // ← backend
+  private apiUrl = 'https://centrecom.up.railway.app/api/ratings'; // ← backend
 
   constructor(private http: HttpClient) {}
 

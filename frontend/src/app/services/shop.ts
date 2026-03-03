@@ -9,7 +9,7 @@ import { Product } from '../models/product';
 })
 export class ShopService {
 
-  private url = "http://localhost:5000/api/shops";
+  private url = "https://centrecom.up.railway.app/api/shops";
 
   constructor(private http: HttpClient) { }
 

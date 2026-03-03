@@ -1,40 +1,42 @@
-// fixCategoryIds.js
+// seedSingleUser.js
+require('dotenv').config();
 const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const Shop = require('./models/boutique/Shop'); // ton modèle Shop
+const bcrypt = require('bcrypt');
+const User = require('./models/boutique/User'); // adapte le chemin
 
-dotenv.config();
-
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connecté'))
-  .catch(err => console.error('Erreur de connexion :', err));
-
-const fixCategoryIds = async () => {
+(async () => {
   try {
-    console.log('--- Début fixCategoryIds ---');
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB connecté");
 
-    const ObjectId = mongoose.Types.ObjectId;
+    // Remplace par l'ID de ta boutique existante
+    const shopId = "69a67b638dd49469617d1e51";
 
-    // Récupérer tous les shops
-    const shops = await Shop.find();
-    console.log(`Nombre de shops trouvés : ${shops.length}`);
+    const email = "owner@boutique.mg";
+    const passwordPlain = "1234";
 
-    for (const shop of shops) {
-      // Vérifier si categoryId est un string
-      if (shop.categoryId && typeof shop.categoryId === 'string') {
-        console.log(`Conversion shop ${shop.name} : ${shop.categoryId} => ObjectId`);
-        shop.categoryId = new ObjectId(shop.categoryId);
-        await shop.save();
-      }
+    // Vérifie si l'utilisateur existe déjà
+    const existing = await User.findOne({ email });
+    if (existing) {
+      console.log("⚠️ User déjà présent :", email);
+      process.exit();
     }
 
-    console.log('✅ Tous les categoryId ont été corrigés.');
-    console.log('--- Fin fixCategoryIds ---');
-  } catch (err) {
-    console.error('❌ Erreur :', err);
-  } finally {
-    mongoose.disconnect();
-  }
-};
+    // Hash du mot de passe
+    const hashedPassword = await bcrypt.hash(passwordPlain, 10);
 
-fixCategoryIds();
+    const user = new User({
+      email,
+      password: hashedPassword,
+      shop: shopId
+    });
+
+    await user.save();
+    console.log("🎉 Utilisateur créé avec succès :", email);
+
+    process.exit();
+  } catch (err) {
+    console.error("❌ Erreur création utilisateur :", err);
+    process.exit(1);
+  }
+})();

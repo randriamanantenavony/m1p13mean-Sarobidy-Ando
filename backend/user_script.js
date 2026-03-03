@@ -21,7 +21,7 @@ async function createShopAndUser() {
     const newUser = new User({
       email: 'shop@mail.com',
       password: hashedPassword,
-      shop: '698b04d85bfcbccb80e5e06a'  // 🔹 ici on met le shopId pour lier l'utilisateur à la boutique
+      shopId: '69a67b638dd49469617d1e51'  // 🔹 ici on met le shopId pour lier l'utilisateur à la boutique
     });
     await newUser.save();
 

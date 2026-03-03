@@ -8,7 +8,7 @@ import { AddToCartRequest, Cart } from '../../models/cart';
 })
 export class CartService {
 
-  private apiUrl = 'http://localhost:5000/api/cart';
+  private apiUrl = 'https://centrecom.up.railway.app/api/cart';
 
   constructor(private http: HttpClient) {}
 

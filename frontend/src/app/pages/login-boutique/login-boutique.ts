@@ -13,8 +13,8 @@ import { FormsModule } from '@angular/forms';
 })
 export class LoginBoutique {
 
-  email: string = 'techstorecT@gmail.com';
-  password: string = '2a2abc52';
+  email: string = 'boutique@gmail.com';
+  password: string = '7f227a30';
   loading: boolean = false;
 
   constructor(

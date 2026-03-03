@@ -9,7 +9,7 @@ import { NotificationModel } from '../../models/notification';
 })
 export class NotificationsServices {
 
-  private apiUrl = 'http://localhost:5000/api/notifications';
+  private apiUrl = 'https://centrecom.up.railway.app/api/notifications';
 
   constructor(private http: HttpClient) {}
 

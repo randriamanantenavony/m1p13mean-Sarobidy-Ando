@@ -8,7 +8,7 @@ import { Category } from '../../models/category';
 })
 export class CategoriesService {
 
-  private apiUrl = ' http://localhost:5000/api/categories_products'; 
+  private apiUrl = 'https://centrecom.up.railway.app/api/categories_products';
 
   constructor(private http: HttpClient) {}
 
