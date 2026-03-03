@@ -22,7 +22,7 @@ getShopById(id: string) {
   }
 
 getProductsByShop(shopId: string) {
-  return this.http.get<Product[]>(`http://localhost:5000/api/products/shop/${shopId}`);
+  return this.http.get<Product[]>(`https://centrecom.up.railway.app/api/products/shop/${shopId}`);
 }
 
 getShopsByCategoryId(categoryId: string): Observable<Shop[]> {
